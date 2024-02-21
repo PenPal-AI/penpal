@@ -3,10 +3,11 @@
 }
 
 #editor {
-  height: 560px;
+  height: 800px;
+  max-height: 70%;
 }
 
 #pills-edit,
 #pills-suggest {
-  background-color: #f3f8f8;
+  background-color: rgba(224, 224, 225, 0.331);
 }
