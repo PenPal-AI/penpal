@@ -5,3 +5,8 @@
 #editor {
   height: 560px;
 }
+
+#pills-edit,
+#pills-suggest {
+  background-color: #eee;
+}
