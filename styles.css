@@ -1,10 +1,7 @@
-html {
-  font-family: sans-serif;
+#main-content {
+  margin-top: 56px;
 }
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 600px;
+#editor {
+  height: 560px;
 }
