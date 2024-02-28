@@ -2,7 +2,6 @@ window.onload = () => {
   //  Listener to cache text on changes
   quill.on("text-change", () => {
     var text = quill.getSemanticHTML();
-    console.log(text);
     localStorage.setItem("text", text);
   });
 
