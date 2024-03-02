@@ -1,10 +1,13 @@
-html {
-  font-family: sans-serif;
+#main-content {
+  margin-top: 56px;
 }
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 600px;
+#editor {
+  height: 800px;
+  max-height: 70%;
+}
+
+#pills-edit,
+#pills-suggest {
+  background-color: rgba(224, 224, 225, 0.331);
 }
