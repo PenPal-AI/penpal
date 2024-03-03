@@ -32,14 +32,43 @@
 
         <!-- Text editor -->
         <div id="editor">
+        <!-- Submit Button -->
+        <button id="submitText" class="btn btn-primary mt-3">Submit Text</button>
         </div>
-
+        
         <script>
+          // Initialize Quill editor
           const quill = new Quill('#editor', {
             theme: 'snow',
             placeholder: 'Write freely or paste your text here! Click on Edit or Suggest and penpal will check it out!'
           });
-        </script>
+        
+          // Function to send text to backend
+          function sendTextToBackend() {
+            // Get text from Quill editor
+            const text = quill.getText();
+        
+            // Send text to backend using fetch API
+            fetch('/your-backend-endpoint', { // Replace '/your-backend-endpoint' with your actual backend endpoint
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ text: text.trim() }),
+            })
+            .then(response => response.json())
+            .then(data => {
+              console.log('Success:', data);
+              // Handle response data here
+            })
+            .catch((error) => {
+              console.error('Error:', error);
+            });
+          }
+        
+          // Add event listener to the submit button
+          document.getElementById('submitText').addEventListener('click', sendTextToBackend);
+        </script>        
       </div>
 
       <!-- Right side content -->
