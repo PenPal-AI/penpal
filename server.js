@@ -3,14 +3,10 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const app = express();
-
-// Use the PORT environment variable provided by Heroku or a default value
 const port = process.env.PORT || 3000;
 
-// Middleware to parse JSON bodies
 app.use(bodyParser.json());
 
-// OpenAI API key (replace 'your_openai_api_key' with your actual key)
 const OPENAI_API_KEY = 'your_openai_api_key';
 
 app.post('/analyze-text', async (req, res) => {
@@ -47,7 +43,11 @@ app.post('/analyze-text', async (req, res) => {
     }
 });
 
-// Start the server
+// Add this route handler for the root path
+app.get('/', (req, res) => {
+    res.send('Welcome to the Text Analysis API! Use the /analyze-text endpoint to analyze your text.');
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
