@@ -1,11 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+const path = require('path'); // Import the 'path' module
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Middleware to parse JSON bodies
 app.use(bodyParser.json());
+
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
 
 const OPENAI_API_KEY = 'your_openai_api_key';
 
@@ -43,10 +48,7 @@ app.post('/analyze-text', async (req, res) => {
     }
 });
 
-// Add this route handler for the root path
-app.get('/', (req, res) => {
-    res.send('Welcome to the Text Analysis API! Use the /analyze-text endpoint to analyze your text.');
-});
+// Remove the previous app.get('/') route handler
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
