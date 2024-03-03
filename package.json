@@ -1,4 +1,16 @@
-"scripts": {
-    "start": "node server.js"
-  },
+{
+    "name": "penpal-text-editor",
+    "version": "1.0.0",
+    "description": "A web application for text editing with grammar correction using Quill and Express.js.",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "author": "Your Name",
+    "license": "ISC",
+    "dependencies": {
+      "express": "^4.17.1",
+      "body-parser": "^1.19.0"
+    }
+  }
   
