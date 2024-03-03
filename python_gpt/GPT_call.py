@@ -14,7 +14,7 @@ if __name__ == '__main__':
         response_format={ "type": "json_object" },
         messages = [
             {"role": "system", "content": "You are giving advice to a student that is writing a college essay. Analyze the tone and give ideas on how to continue this essay. The output should be in JSON format."},
-            {"role": "user", "content": "When our mother would drop my sisters and I off at the PlayPen in IKEA, I would assume my usual seat at the coloring table, take a coloring sheet, and flip it over to the blank side. The Disney Princesses and strange, google-eyed animals would be pressed against the sticky table as I scribbled on the white page before me. My sisters and the others would gawk. Why isn’t she coloring the outlined picture? And this habit wasn’t isolated only to the furniture franchise. The dentist, Psychologist’s office, GAP’s coloring table were all places where, in my hands, the scribbles would appear on the back as opposed to the front"},
+            {"role": "user", "content": "When our mother would drop my sisters and I off at the PlayPen in IKEA, I would assume my usual seat at the coloring table, take a coloring sheet, and flip it over to the blank side. The Disney Princesses and strange, google-eyed animals would be pressed against the sticky table as I scribbled on the white page before me. My sisters and the others would gawk. Why isn't she coloring the outlined picture? And this habit wasn't isolated only to the furniture franchise. The dentist, Psychologist's office, GAP's coloring table were all places where, in my hands, the scribbles would appear on the back as opposed to the front"},
         ]
     )
     print(response.choices[0].message.content)
