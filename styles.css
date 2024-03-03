@@ -1,3 +1,5 @@
+
+
 #main-content {
   margin-top: 56px;
 }
@@ -11,3 +13,9 @@
 #pills-suggest {
   background-color: rgba(224, 224, 225, 0.331);
 }
+
+.navbar {
+  background-color: #DBE6D4;
+}
+
+
