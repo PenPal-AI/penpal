@@ -9,3 +9,5 @@ window.onload = () => {
   var cachedText = localStorage.getItem("text") || "";
   quill.clipboard.dangerouslyPasteHTML(cachedText);
 };
+
+
