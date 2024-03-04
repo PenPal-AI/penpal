@@ -10,6 +10,7 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -92,7 +93,31 @@
         <!-- Edit mode content -->
         <div class="tab-pane h-100 p-3 fade" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab"
           tabindex="0">
-          <p>Editing suggestions</p>
+          <!--<p>Editing suggestions</p> -->
+
+          <div class="list-group editing-list">
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Editing Suggestion</h5>
+                <!--<small>small text top right</small>-->
+                <span class="badge badge-primary badge-pill">14</span>
+              </div>
+              <p class="mb-1">Here's your editing suggestion!</p>
+              <!--<small>Small text bottom</small>-->
+            </a>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Editing Suggestion</h5>
+                <!--<small>small text top right</small>-->
+                <span class="badge badge-primary badge-pill">14</span>
+              </div>
+              <p class="mb-1">Here's your editing suggestion!</p>
+              <!--<small>Small text bottom</small>-->
+            </a>
+          </div>
+        
+          
+        <button type="button" class="suggest btn btn-primary">Generate Suggestion</button>
         </div>
 
         <!-- Suggest mode content -->
