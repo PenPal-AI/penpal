@@ -17,7 +17,7 @@ window.onload = () => {
 var listItems = $(".list-group-item");
 
 //readies functions on load
-$(document).ready(function () {
+//$(document).ready(function () { 
   /*
 
   //Fancy way of making suggestions selectable (doesn't work)
@@ -37,7 +37,7 @@ $(document).ready(function () {
     this.classList.add("active"); 
   }); 
   */
-
+  /*
   //generate new suggestions (4 upon load)
   //uses the fancy Jquery/Bootstrap stuff
   //$('.suggest').click(function() {
@@ -46,28 +46,58 @@ $(document).ready(function () {
   body = "body of suggestion";
   number = "22";
 
+  if (id == "pills-edit") {
   for (let i = 0; i < numOfSuggestions; i++) {
+
     $(".list-group").append(
       " <a href='#' onclick='selectCard(\"elem" +
         (i + 2).toString() +
-        "\")' class='list-group-item list-group-item-action flex-column align-items-start elem" +
+        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
         (i + 2).toString() +
         "'>" +
         "<div class='d-flex w-100 justify-content-between'>" +
         "<h5 class='mb-1'>" +
         title +
         "</h5>" +
-        "<span class='badge badge-primary badge-pill'>" +
+        "<span class='badge badge-secondary badge-pill'>" +
         number +
         "</span> </div>" +
         "<p class='mb-1'>" +
         body +
         "!</p></a>"
     );
-  }
+  } }
 
   //});
-});
+}); */
+
+function generateEdits() {
+  numOfSuggestions = 4;
+  title = "new suggestion";
+  body = "body of suggestion";
+  number = "22";
+
+  for (let i = 0; i < numOfSuggestions; i++) {
+
+    $(".list-group").eq(0).append(
+      " <a href='#' onclick='selectCard(\"elem" +
+        (i + 2).toString() +
+        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
+        (i + 2).toString() +
+        "'>" +
+        "<div class='d-flex w-100 justify-content-between'>" +
+        "<h5 class='mb-1'>" +
+        title +
+        "</h5>" +
+        "<span class='badge badge-secondary badge-pill'>" +
+        number +
+        "</span> </div>" +
+        "<p class='mb-1'>" +
+        body +
+        "!</p></a>"
+    );
+  } 
+}
 
 //tracks number of generated suggestions
 var i = 0;
@@ -75,23 +105,23 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button, but this is just for demo purposes
 //when we generate suggestions in the backend, call this function
-function generateSuggestion(
+function generateAISuggestion(
   body = "body of suggestion",
-  title = "new editing suggestion"
+  title = "new AI suggestion"
 ) {
   number = "22"; //number of edits/highlights
 
-  $(".list-group").append(
+  $(".list-group").eq(1).append(
     " <a href='#' onclick='selectCard(\"elem" +
       (i + 6).toString() +
-      "\")' class='list-group-item list-group-item-action flex-column align-items-start elem" +
+      "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
       (i + 6).toString() +
       "'>" +
       "<div class='d-flex w-100 justify-content-between'>" +
       "<h5 class='mb-1'>" +
       title +
       "</h5>" +
-      "<span class='badge badge-primary badge-pill'>" +
+      "<span class='badge badge-secondary badge-pill'>" +
       number +
       "</span> </div>" +
       "<p class='mb-1'>" +

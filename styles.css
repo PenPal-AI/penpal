@@ -14,11 +14,21 @@
   background-color: rgba(224, 224, 225, 0.331);
 }
 
+/*
 .navbar {
   background-color: #DBE6D4;
 }
+*/
 
 .brbr {
   height: 300px;
+}
+
+.editing-list {
+  
+}
+
+.suggestion-list {
+
 }
 
