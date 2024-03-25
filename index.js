@@ -71,11 +71,16 @@ var listItems = $(".list-group-item");
   //});
 }); */
 
+//cap for editing suggestions
+let j = 0;
+
 function generateEdits() {
   numOfSuggestions = 4;
   title = "new suggestion";
   body = "body of suggestion";
   number = "22";
+
+  if (j < 6) {
 
   for (let i = 0; i < numOfSuggestions; i++) {
 
@@ -96,9 +101,9 @@ function generateEdits() {
         body +
         "!</p></a>"
     );
-  } 
+    j++;
+  } }
 } 
-//test
 
 //tracks number of generated suggestions
 var i = 0;
@@ -110,7 +115,6 @@ function generateAISuggestion(
   body = "body of suggestion",
   title = "new AI suggestion"
 ) {
-  number = "22"; //number of edits/highlights
 
   $(".list-group").eq(1).append(
     " <a href='#' onclick='selectCard(\"elem" +
@@ -122,15 +126,13 @@ function generateAISuggestion(
       "<h5 class='mb-1'>" +
       title +
       "</h5>" +
-      "<span class='badge badge-secondary badge-pill'>" +
-      number +
-      "</span> </div>" +
+      "</div>" +
       "<p class='mb-1'>" +
       body +
       "!</p></a>"
   );
   i++;
-}
+} 
 
 //makes suggestions selectable
 function selectCard(elemNumber) {
