@@ -16,61 +16,6 @@ window.onload = () => {
 //general list of items in suggestion list
 var listItems = $(".list-group-item");
 
-//readies functions on load
-//$(document).ready(function () { 
-  /*
-
-  //Fancy way of making suggestions selectable (doesn't work)
-
-  $(".list-group-item").click(function() { 
-                
-    // Select all list items 
-    listItems = $(".list-group-item"); 
-    console.log(listItems);
-      
-    // Remove 'active' tag for all list items 
-    for (let i = 0; i < listItems.length; i++) { 
-        listItems[i].classList.remove("active"); 
-    } 
-      
-    // Add 'active' tag for currently selected item 
-    this.classList.add("active"); 
-  }); 
-  */
-  /*
-  //generate new suggestions (4 upon load)
-  //uses the fancy Jquery/Bootstrap stuff
-  //$('.suggest').click(function() {
-  numOfSuggestions = 4;
-  title = "new suggestion";
-  body = "body of suggestion";
-  number = "22";
-
-  if (id == "pills-edit") {
-  for (let i = 0; i < numOfSuggestions; i++) {
-
-    $(".list-group").append(
-      " <a href='#' onclick='selectCard(\"elem" +
-        (i + 2).toString() +
-        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
-        (i + 2).toString() +
-        "'>" +
-        "<div class='d-flex w-100 justify-content-between'>" +
-        "<h5 class='mb-1'>" +
-        title +
-        "</h5>" +
-        "<span class='badge badge-secondary badge-pill'>" +
-        number +
-        "</span> </div>" +
-        "<p class='mb-1'>" +
-        body +
-        "!</p></a>"
-    );
-  } }
-
-  //});
-}); */
-
 //cap for editing suggestions
 let j = 0;
 
