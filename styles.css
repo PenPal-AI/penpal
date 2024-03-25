@@ -32,3 +32,8 @@
 
 }
 
+.tab-pane {
+  overflow-y: auto;
+  max-height: 75vh;
+}
+
