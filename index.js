@@ -97,7 +97,8 @@ function generateEdits() {
         "!</p></a>"
     );
   } 
-}
+} 
+//test
 
 //tracks number of generated suggestions
 var i = 0;
