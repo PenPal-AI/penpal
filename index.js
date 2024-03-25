@@ -17,7 +17,7 @@ window.onload = () => {
 var listItems = $(".list-group-item");
 
 //readies functions on load
-$(document).ready(function () {
+//$(document).ready(function () { 
   /*
 
   //Fancy way of making suggestions selectable (doesn't work)
@@ -37,7 +37,7 @@ $(document).ready(function () {
     this.classList.add("active"); 
   }); 
   */
-
+  /*
   //generate new suggestions (4 upon load)
   //uses the fancy Jquery/Bootstrap stuff
   //$('.suggest').click(function() {
@@ -46,28 +46,90 @@ $(document).ready(function () {
   body = "body of suggestion";
   number = "22";
 
+  if (id == "pills-edit") {
   for (let i = 0; i < numOfSuggestions; i++) {
+
     $(".list-group").append(
       " <a href='#' onclick='selectCard(\"elem" +
         (i + 2).toString() +
-        "\")' class='list-group-item list-group-item-action flex-column align-items-start elem" +
+        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
         (i + 2).toString() +
         "'>" +
         "<div class='d-flex w-100 justify-content-between'>" +
         "<h5 class='mb-1'>" +
         title +
         "</h5>" +
-        "<span class='badge badge-primary badge-pill'>" +
+        "<span class='badge badge-secondary badge-pill'>" +
         number +
         "</span> </div>" +
         "<p class='mb-1'>" +
         body +
         "!</p></a>"
     );
-  }
+  } }
 
   //});
-});
+}); */
+
+//cap for editing suggestions
+let j = 0;
+
+function generateEdits() {
+
+  //hide the generate AI suggestion button
+  generateButton = $(".generate-button");      
+  for (let i = 0; i < generateButton.length; i++) {   
+    generateButton[i].classList.remove("generate-button-show");
+    generateButton[i].classList.add("generate-button-hide");
+  }
+
+  numOfSuggestions = 4;
+  title = "new suggestion";
+  body = "body of suggestion";
+  number = "22";
+
+  if (j < 6) {
+
+  for (let i = 0; i < numOfSuggestions; i++) {
+
+    $(".list-group").eq(0).append(
+      " <a href='#' onclick='selectCard(\"elem" +
+        (j + 2).toString() +
+        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
+        (j + 2).toString() +
+        "'>" +
+        "<div class='d-flex w-100 justify-content-between'>" +
+        "<h5 class='mb-1'>" +
+        title +
+        "</h5>" +
+        "<span class='badge badge-secondary badge-pill'>" +
+        number +
+        "</span> </div>" +
+        "<p class='mb-1'>" +
+        body +
+        "!</p></a>"
+    );
+    j++;
+  } }
+} 
+
+function showButton() {
+    //show the generate AI suggestion button
+      generateButton = $(".generate-button");   
+      for (let i = 0; i < generateButton.length; i++) {   
+        generateButton[i].classList.remove("generate-button-hide");
+        generateButton[i].classList.add("generate-button-show");
+      }
+}
+
+function hideButton() {
+  //hide the generate AI suggestion button
+      generateButton = $(".generate-button");      
+      for (let i = 0; i < generateButton.length; i++) {   
+        generateButton[i].classList.remove("generate-button-show");
+        generateButton[i].classList.add("generate-button-hide");
+      }
+}
 
 //tracks number of generated suggestions
 var i = 0;
@@ -75,31 +137,28 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button, but this is just for demo purposes
 //when we generate suggestions in the backend, call this function
-function generateSuggestion(
-  body = "body of suggestion",
-  title = "new editing suggestion"
-) {
-  number = "22"; //number of edits/highlights
+function generateAISuggestion(
+  body = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  title = "new AI suggestion"
+) {  
 
-  $(".list-group").append(
+  $(".list-group").eq(1).append(
     " <a href='#' onclick='selectCard(\"elem" +
       (i + 6).toString() +
-      "\")' class='list-group-item list-group-item-action flex-column align-items-start elem" +
+      "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
       (i + 6).toString() +
       "'>" +
       "<div class='d-flex w-100 justify-content-between'>" +
       "<h5 class='mb-1'>" +
       title +
       "</h5>" +
-      "<span class='badge badge-primary badge-pill'>" +
-      number +
-      "</span> </div>" +
+      "</div>" +
       "<p class='mb-1'>" +
       body +
       "!</p></a>"
   );
   i++;
-}
+} 
 
 //makes suggestions selectable
 function selectCard(elemNumber) {

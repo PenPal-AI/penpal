@@ -15,10 +15,10 @@
 
 <body>
   <!-- Nav Bar -->
-  <div class="bg-dark">
-    <nav class="container navbar navbar-expand-lg navbar-dark">
+  <div class="bg-secondary">
+    <nav class="container navbar navbar-expand-lg navbar-secondary">
       <div class="container-fluid">
-        <a class="navbar-brand fs-3 fw-medium" href="#">penpal.ai</a>
+        <a class="navbar-brand fs-3 fw-medium text-light" href="#">penpal.ai</a>
       </div>
     </nav>
   </div>
@@ -32,8 +32,17 @@
 
         <!-- Text editor -->
         <div id="editor"></div>
-        <!-- Submit Button -->
-        <button id="submitText" class="btn btn-primary mt-3">Submit Text</button>
+
+        <br>
+
+        <div class="generate-button generate-button-hide">
+          <button type="button" onClick = "generateAISuggestion()" class="suggest btn btn-secondary">Generate Suggestion</button>
+          <p style="padding-left: 10px">Click the button to generate suggestions!</p>
+        </div>
+
+        <!-- Submit Button 
+          Why do we need this? This doesn't do anything
+        <button id="submitText" class="btn btn-secondary mt-3">Submit Text</button> -->
         
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
         <script src="index.js"></script>
@@ -76,13 +85,13 @@
       <div class="col-4 d-flex flex-column">
        <!-- Radio buttons for mode selection -->
        <ul class="btn-group p-0" id="pills-tab" role="tablist">
-        <button class="btn btn-outline-primary active" id="pills-write-tab" data-bs-toggle="pill"
-          data-bs-target="#pills-write" role="tab" aria-controls="pills-write" aria-selected="true">Write</button>
-        <button class="btn btn-outline-primary" id="pills-edit-tab" data-bs-toggle="pill" data-bs-target="#pills-edit"
-          role="tab" aria-controls="pills-edit" aria-selected="false">Edit</button>
-        <button class="btn btn-outline-primary" id="pills-suggest-tab" data-bs-toggle="pill"
+        <button class="btn btn-outline-info active" id="pills-write-tab" data-bs-toggle="pill"
+          data-bs-target="#pills-write" role="tab" aria-controls="pills-write" onClick="hideButton()" aria-selected="true">Write</button>
+        <button class="btn btn-outline-info" id="pills-edit-tab" data-bs-toggle="pill" data-bs-target="#pills-edit"
+          role="tab" aria-controls="pills-edit" aria-selected="false" onClick="generateEdits()">Edit</button>
+        <button class="btn btn-outline-info" id="pills-suggest-tab" data-bs-toggle="pill"
           data-bs-target="#pills-suggest" role="tab" aria-controls="pills-suggest"
-          aria-selected="false">Suggest</button>
+          aria-selected="false" onClick="showButton()">Suggest</button>
       </ul>
 
       <!-- Write/Edit/Suggest content -->
@@ -97,34 +106,41 @@
 
           
           <div class="list-group editing-list">
-            <a href="#" onclick="selectCard('elem' + 0)" class="list-group-item list-group-item-action flex-column align-items-start elem0 active">
+            <!--
+            <a href="#" onclick="selectCard('elem' + 0)" class="list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem0 active">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">Editing Suggestion</h5>
-                <!--<small>small text top right</small>-->
-                <span class="badge badge-primary badge-pill">14</span>
+                
+                <span class="badge badge-secondary badge-pill">14</span>
               </div>
               <p class="mb-1">Here's your editing suggestion!</p>
-              <!--<small>Small text bottom</small>-->
+
             </a>
-            <a href="#" onclick="selectCard('elem' + 1)" class="list-group-item list-group-item-action flex-column elem1 align-items-start">
+            <a href="#" onclick="selectCard('elem' + 1)" class="list-group-item list-group-item-action list-group-item-light flex-column elem1 align-items-start">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">Editing Suggestion</h5>
-                <!--<small>small text top right</small>-->
-                <span class="badge badge-primary badge-pill">14</span>
+   
+                <span class="badge badge-secondary badge-pill">14</span>
               </div>
               <p class="mb-1">Here's your editing suggestion!</p>
-              <!--<small>Small text bottom</small>-->
-            </a>
+
+            </a> -->
           </div>
         
           
-        <button type="button" onClick = "generateSuggestion()" class="suggest btn btn-primary">Generate Suggestion</button>
+          
         </div>
 
         <!-- Suggest mode content -->
         <div class="tab-pane h-100 p-3 fade" id="pills-suggest" role="tabpanel" aria-labelledby="pills-suggest-tab"
           tabindex="0">
-          <p>Pretend I'm a super impressive AI suggesting content for your writing!</p>
+
+          <!--<p>Suggest mode suggestions</p> -->
+          
+          <div class="list-group suggestion-list">
+            
+          </div>
+        
         </div>
       </div>
     </div>
