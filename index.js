@@ -75,6 +75,14 @@ var listItems = $(".list-group-item");
 let j = 0;
 
 function generateEdits() {
+
+  //hide the generate AI suggestion button
+  generateButton = $(".generate-button");      
+  for (let i = 0; i < generateButton.length; i++) {   
+    generateButton[i].classList.remove("generate-button-show");
+    generateButton[i].classList.add("generate-button-hide");
+  }
+
   numOfSuggestions = 4;
   title = "new suggestion";
   body = "body of suggestion";
@@ -86,9 +94,9 @@ function generateEdits() {
 
     $(".list-group").eq(0).append(
       " <a href='#' onclick='selectCard(\"elem" +
-        (i + 2).toString() +
+        (j + 2).toString() +
         "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
-        (i + 2).toString() +
+        (j + 2).toString() +
         "'>" +
         "<div class='d-flex w-100 justify-content-between'>" +
         "<h5 class='mb-1'>" +
@@ -105,6 +113,24 @@ function generateEdits() {
   } }
 } 
 
+function showButton() {
+    //show the generate AI suggestion button
+      generateButton = $(".generate-button");   
+      for (let i = 0; i < generateButton.length; i++) {   
+        generateButton[i].classList.remove("generate-button-hide");
+        generateButton[i].classList.add("generate-button-show");
+      }
+}
+
+function hideButton() {
+  //hide the generate AI suggestion button
+      generateButton = $(".generate-button");      
+      for (let i = 0; i < generateButton.length; i++) {   
+        generateButton[i].classList.remove("generate-button-show");
+        generateButton[i].classList.add("generate-button-hide");
+      }
+}
+
 //tracks number of generated suggestions
 var i = 0;
 
@@ -114,7 +140,7 @@ var i = 0;
 function generateAISuggestion(
   body = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
   title = "new AI suggestion"
-) {
+) {  
 
   $(".list-group").eq(1).append(
     " <a href='#' onclick='selectCard(\"elem" +

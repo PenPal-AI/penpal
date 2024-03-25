@@ -32,6 +32,14 @@
 
         <!-- Text editor -->
         <div id="editor"></div>
+
+        <br>
+
+        <div class="generate-button generate-button-hide">
+          <button type="button" onClick = "generateAISuggestion()" class="suggest btn btn-secondary">Generate Suggestion</button>
+          <p style="padding-left: 10px">Click the button to generate suggestions!</p>
+        </div>
+
         <!-- Submit Button 
           Why do we need this? This doesn't do anything
         <button id="submitText" class="btn btn-secondary mt-3">Submit Text</button> -->
@@ -78,12 +86,12 @@
        <!-- Radio buttons for mode selection -->
        <ul class="btn-group p-0" id="pills-tab" role="tablist">
         <button class="btn btn-outline-info active" id="pills-write-tab" data-bs-toggle="pill"
-          data-bs-target="#pills-write" role="tab" aria-controls="pills-write" aria-selected="true">Write</button>
+          data-bs-target="#pills-write" role="tab" aria-controls="pills-write" onClick="hideButton()" aria-selected="true">Write</button>
         <button class="btn btn-outline-info" id="pills-edit-tab" data-bs-toggle="pill" data-bs-target="#pills-edit"
           role="tab" aria-controls="pills-edit" aria-selected="false" onClick="generateEdits()">Edit</button>
         <button class="btn btn-outline-info" id="pills-suggest-tab" data-bs-toggle="pill"
           data-bs-target="#pills-suggest" role="tab" aria-controls="pills-suggest"
-          aria-selected="false">Suggest</button>
+          aria-selected="false" onClick="showButton()">Suggest</button>
       </ul>
 
       <!-- Write/Edit/Suggest content -->
@@ -92,7 +100,7 @@
         <!-- <div class="tab-pane fade show active" id="pills-write" role="tabpanel" aria-labelledby="pills-write-tab" tabindex="0"></div> -->
 
         <!-- Edit mode content -->
-        <div class="tab-pane h-100 p-3 fade" style="overflow-y:auto;" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab"
+        <div class="tab-pane h-100 p-3 fade" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab"
           tabindex="0">
           <!--<p>Editing suggestions</p> -->
 
@@ -124,7 +132,7 @@
         </div>
 
         <!-- Suggest mode content -->
-        <div class="tab-pane h-100 p-3 fade" style="overflow-y:auto;" id="pills-suggest" role="tabpanel" aria-labelledby="pills-suggest-tab"
+        <div class="tab-pane h-100 p-3 fade" id="pills-suggest" role="tabpanel" aria-labelledby="pills-suggest-tab"
           tabindex="0">
 
           <!--<p>Suggest mode suggestions</p> -->
@@ -133,10 +141,6 @@
             
           </div>
         
-          
-          <button type="button" onClick = "generateAISuggestion()" class="suggest btn btn-secondary">Generate Suggestion</button>
-
-          <p>Click the button to generate suggestions!</p>
         </div>
       </div>
     </div>
