@@ -16,10 +16,12 @@ window.onload = () => {
 //different modes, controlled by buttons
 function writeMode() {
   hideButton();
+  deleteEditingSuggestions();
 }
 
 function suggestMode() {
   showButton();
+  deleteEditingSuggestions();
 }
 
 function editMode() {
@@ -49,7 +51,7 @@ function generateWordFrequencyEdits(
   $(".list-group").eq(0).append(
     " <a href='#' onclick='selectCard(\"elem" +
       (j + 2).toString() +
-      "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
+      "\")' class='list-group-item editing-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
       (j + 2).toString() +
       "'>" +
       "<div class='d-flex w-100 justify-content-between'>" +
@@ -125,7 +127,7 @@ function generateEdits() {
     $(".list-group").eq(0).append(
       " <a href='#' onclick='selectCard(\"elem" +
         (j + 2).toString() +
-        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
+        "\")' class='list-group-item editing-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
         (j + 2).toString() +
         "'>" +
         "<div class='d-flex w-100 justify-content-between'>" +
@@ -142,6 +144,16 @@ function generateEdits() {
     j++;
   } }
 } 
+
+//delete editing suggestions when clicked away from the editing tab
+function deleteEditingSuggestions() {
+  listItems = $(".editing-item");
+  for (let l = 0; l < listItems.length; l++) {
+    const element = listItems[l];
+    element.remove();
+    j--;
+  }
+}
 
 function showButton() {
     //show the generate AI suggestion button
@@ -160,6 +172,8 @@ function hideButton() {
         generateButton[i].classList.add("generate-button-hide");
       }
 }
+
+
 
 //tracks number of generated suggestions
 var i = 0;
