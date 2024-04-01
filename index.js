@@ -24,6 +24,33 @@ var listItems = $(".list-group-item");
 //cap for editing suggestions
 let j = 0;
 
+function generateWordFrequencyEdits(
+    title = "Word Frequency Suggestion",
+    word = "dummyWord",
+    body = "You used the word ",
+    body2 = " times. That's a lot! Try to find a synonym or restructure your sentences to use alternate words.",
+    number = "22"
+    ) {
+  $(".list-group").eq(0).append(
+    " <a href='#' onclick='selectCard(\"elem" +
+      (j + 2).toString() +
+      "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
+      (j + 2).toString() +
+      "'>" +
+      "<div class='d-flex w-100 justify-content-between'>" +
+      "<h5 class='mb-1'>" +
+      title +
+      "</h5>" +
+      "<span class='badge badge-secondary badge-pill'>" +
+      number +
+      "</span> </div>" +
+      "<p class='mb-1'>" +
+      body + word + "' " + number + body2 +
+      "!</p></a>"
+  );
+  j++;
+}
+
 function generateEdits() {
 
   //hide the generate AI suggestion button
@@ -35,17 +62,46 @@ function generateEdits() {
 
   //quill editor functions
   const text = quill.getText(0);
-  console.log(text);
+  //console.log(text);
 
+  //remove punctuation
   var punctuation = /[\.,?!]/g;
   var newLine = /\n/g;
   var newText = text.replace(punctuation, "");
   newText = newText.replace(newLine, "");
+
+  //create text array and filter out whitespace and common words
   const textArray = newText.split(" ");
   const filteredTextArray = textArray.filter(filterFunction);
 
+  //number of words in the array
+  var numWords = filteredTextArray.length;
+
+  //create a dictionary of object counts
+  var count = {};
+
+  for (k=0; k<numWords; k++) {
+    var word = filteredTextArray[k];
+    if (count[word]) {
+      count[word] += 1;
+    }
+    else {
+      count[word] = 1;
+    }
+  }
+
+  for (element in count) {
+    if (count[element] / numWords >= .1) {
+      generateWordFrequencyEdits("Word Frequency Suggestion", element, "You used the word '", " times. That's a lot! Try to find a synonym or restructure your sentences to use alternate words.", count[element]);
+      console.log(element);
+    }
+  }
+
+  console.log(numWords.toString());
   console.log(newText);
   console.log(filteredTextArray);
+
+  console.log(count);
 
 
   numOfSuggestions = 4;
