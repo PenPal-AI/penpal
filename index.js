@@ -40,7 +40,7 @@ var listItems = $(".list-group-item");
 //cap for editing suggestions
 let j = 0;
 
-//word frequency edits
+//generate word frequency edits
 function generateWordFrequencyEdits(
     title = "Word Frequency Suggestion",
     word = "dummyWord",
@@ -68,9 +68,8 @@ function generateWordFrequencyEdits(
   j++;
 }
 
-//generates editing suggestions
-function generateEdits() {
-
+//tokenize text
+function tokenize() {
   //quill editor functions
   const text = quill.getText(0);
 
@@ -82,7 +81,13 @@ function generateEdits() {
 
   //create text array and filter out whitespace and common words
   const textArray = newText.split(" ");
-  const filteredTextArray = textArray.filter(filterFunction);
+  return textArray.filter(filterFunction);
+}
+
+//generates editing suggestions
+function generateEdits() {
+
+  const filteredTextArray = tokenize();
 
   //number of words in the array
   var numWords = filteredTextArray.length;
@@ -103,16 +108,8 @@ function generateEdits() {
   for (element in count) {
     if (count[element] / numWords >= .1 && count[element] > 2) {
       generateWordFrequencyEdits("Word Frequency Suggestion", element, "You used the word '", " times. That's a lot! Try to find a synonym or restructure your sentences to use alternate words.", count[element]);
-      //console.log(element);
     }
   }
-
-  //console.log(numWords.toString());
-  //console.log(newText);
-  //console.log(filteredTextArray);
-
-  //console.log(count);
-
 
   //temporary way to generate suggestions
   numOfSuggestions = 4;
@@ -172,8 +169,6 @@ function hideButton() {
         generateButton[i].classList.add("generate-button-hide");
       }
 }
-
-
 
 //tracks number of generated suggestions
 var i = 0;
