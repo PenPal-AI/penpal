@@ -63,7 +63,7 @@ function generateWordFrequencyEdits(
       "</span> </div>" +
       "<p class='mb-1'>" +
       body + word + "' " + number + body2 +
-      "!</p></a>"
+      "</p></a>"
   );
   j++;
 }
@@ -101,7 +101,7 @@ function generateEdits() {
   }
 
   for (element in count) {
-    if (count[element] / numWords >= .1) {
+    if (count[element] / numWords >= .1 && count[element] > 2) {
       generateWordFrequencyEdits("Word Frequency Suggestion", element, "You used the word '", " times. That's a lot! Try to find a synonym or restructure your sentences to use alternate words.", count[element]);
       //console.log(element);
     }
@@ -139,7 +139,7 @@ function generateEdits() {
         "</span> </div>" +
         "<p class='mb-1'>" +
         body +
-        "!</p></a>"
+        "</p></a>"
     );
     j++;
   } }
