@@ -13,6 +13,11 @@ window.onload = () => {
 
 //SUGGESTION GENERATION THINGS
 
+//filter for the text array
+function filterFunction(value) {
+    return (value != "" && value != "a" && value != "an" && value != "the" && value != "and" && value != "or");
+}
+
 //general list of items in suggestion list
 var listItems = $(".list-group-item");
 
@@ -27,6 +32,21 @@ function generateEdits() {
     generateButton[i].classList.remove("generate-button-show");
     generateButton[i].classList.add("generate-button-hide");
   }
+
+  //quill editor functions
+  const text = quill.getText(0);
+  console.log(text);
+
+  var punctuation = /[\.,?!]/g;
+  var newLine = /\n/g;
+  var newText = text.replace(punctuation, "");
+  newText = newText.replace(newLine, "");
+  const textArray = newText.split(" ");
+  const filteredTextArray = textArray.filter(filterFunction);
+
+  console.log(newText);
+  console.log(filteredTextArray);
+
 
   numOfSuggestions = 4;
   title = "new suggestion";
@@ -80,12 +100,18 @@ function hideButton() {
 var i = 0;
 
 //generalized generate suggestions function
-//currently uses a button, but this is just for demo purposes
+//currently uses a button
 //when we generate suggestions in the backend, call this function
 function generateAISuggestion(
   body = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
   title = "new AI suggestion"
 ) {  
+
+  //quill editor functions
+  const text = quill.getText(0);
+
+  //TODO FOR THE BACKEND: instead of console.logging the text, send to gpt!
+  console.log(text);
 
   $(".list-group").eq(1).append(
     " <a href='#' onclick='selectCard(\"elem" +
