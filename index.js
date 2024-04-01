@@ -13,6 +13,20 @@ window.onload = () => {
 
 //SUGGESTION GENERATION THINGS
 
+//different modes, controlled by buttons
+function writeMode() {
+  hideButton();
+}
+
+function suggestMode() {
+  showButton();
+}
+
+function editMode() {
+  hideButton();
+  generateEdits();
+}
+
 //filter for the text array
 function filterFunction(value) {
     return (value != "" && value != "a" && value != "an" && value != "the" && value != "and" && value != "or");
@@ -24,6 +38,7 @@ var listItems = $(".list-group-item");
 //cap for editing suggestions
 let j = 0;
 
+//word frequency edits
 function generateWordFrequencyEdits(
     title = "Word Frequency Suggestion",
     word = "dummyWord",
@@ -51,18 +66,11 @@ function generateWordFrequencyEdits(
   j++;
 }
 
+//generates editing suggestions
 function generateEdits() {
-
-  //hide the generate AI suggestion button
-  generateButton = $(".generate-button");      
-  for (let i = 0; i < generateButton.length; i++) {   
-    generateButton[i].classList.remove("generate-button-show");
-    generateButton[i].classList.add("generate-button-hide");
-  }
 
   //quill editor functions
   const text = quill.getText(0);
-  //console.log(text);
 
   //remove punctuation
   var punctuation = /[\.,?!]/g;
@@ -93,17 +101,18 @@ function generateEdits() {
   for (element in count) {
     if (count[element] / numWords >= .1) {
       generateWordFrequencyEdits("Word Frequency Suggestion", element, "You used the word '", " times. That's a lot! Try to find a synonym or restructure your sentences to use alternate words.", count[element]);
-      console.log(element);
+      //console.log(element);
     }
   }
 
-  console.log(numWords.toString());
-  console.log(newText);
-  console.log(filteredTextArray);
+  //console.log(numWords.toString());
+  //console.log(newText);
+  //console.log(filteredTextArray);
 
-  console.log(count);
+  //console.log(count);
 
 
+  //temporary way to generate suggestions
   numOfSuggestions = 4;
   title = "new suggestion";
   body = "body of suggestion";
