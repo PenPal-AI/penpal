@@ -5,6 +5,7 @@ const path = require('path'); // Import the 'path' module
 
 const app = express();
 const port = process.env.PORT || 3000;
+console.log("port: ", port);
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
@@ -12,22 +13,35 @@ app.use(bodyParser.json());
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-const OPENAI_API_KEY = 'your_openai_api_key';
+const OPENAI_API_KEY = "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";
+
+// Serve static files from the 'public' directory
+app.use(express.static("."));
+app.set('view engine', 'html');
+app.get('/', function(req, res) {
+        res.render('index');
+});
 
 app.post('/analyze-text', async (req, res) => {
     const { text } = req.body;
-
+    console.log('Received text:', text)
     if (!text) {
         return res.status(400).json({ error: 'No text provided' });
     }
 
     try {
         const response = await axios.post(
-            'https://api.openai.com/v1/engines/davinci-codex/completions',
+            'https://api.openai.com/v1/chat/completions',
             {
-                prompt: `Review the following student writing for any grammar, spelling, and punctuation errors:\n\n"${text}"\n\nProvide corrections and explanations:`,
-                temperature: 0.5,
-                max_tokens: 250,
+                model: "gpt-3.5-turbo-0125",
+                messages: [
+                    {
+                    role: "user",
+                    content: `Review the following student writing for any grammar, spelling, and punctuation errors:\n\n"${text}"\n\nProvide corrections and explanations:`,
+                    }
+                ],
+                temperature: 1,
+                max_tokens: 256,
                 top_p: 1,
                 frequency_penalty: 0,
                 presence_penalty: 0
@@ -40,7 +54,8 @@ app.post('/analyze-text', async (req, res) => {
             }
         );
 
-        const corrections = response.data.choices[0].text.trim();
+        const corrections = response.data.choices[0].message.content.trim();
+
         res.json({ originalText: text, corrections });
     } catch (error) {
         console.error('Error:', error);

@@ -59,8 +59,22 @@
             })
             .then(response => response.json())
             .then(data => {
-              console.log('Success:', data);
+              // Get the container element
+              const suggestionContainer = document.getElementById('SuggestionContainer');
+
+              // Check if corrections field exists in the response
+              if (data.corrections) {
+                const formattedCorrections = data.corrections.replace(/\"/g, ''); // Remove extra quotes
+                // Set the text content of the container to the formatted corrections
+                suggestionContainer.textContent = formattedCorrections;
+              }
+               else {
+                  // If no corrections found, display a message
+                suggestionContainer.textContent = 'No corrections found.';
+              }
+
               // Handle response data here
+              
             })
             .catch((error) => {
               console.error('Error:', error);
@@ -125,7 +139,11 @@
         <div class="tab-pane h-100 p-3 fade" id="pills-suggest" role="tabpanel" aria-labelledby="pills-suggest-tab"
           tabindex="0">
           <p>Pretend I'm a super impressive AI suggesting content for your writing!</p>
+          <div id="SuggestionContainer">
+            <!-- Text will be displayed here -->
         </div>
+        </div>
+        <script src="server.js"></script>
       </div>
     </div>
   </div>
