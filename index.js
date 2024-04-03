@@ -14,19 +14,26 @@ window.onload = () => {
 //SUGGESTION GENERATION THINGS
 
 //different modes, controlled by buttons
+var isEditMode = false;
+
 function writeMode() {
+  isEditMode = false;
   hideButton();
   deleteEditingSuggestions();
 }
 
 function suggestMode() {
+  isEditMode = false;
   showButton();
   deleteEditingSuggestions();
 }
 
 function editMode() {
-  hideButton();
-  generateEdits();
+  if (!isEditMode) {
+    isEditMode = true;
+    hideButton();
+    generateEdits();
+  }
 }
 
 //filter for the text array
