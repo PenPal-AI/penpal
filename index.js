@@ -237,6 +237,14 @@ function selectCard(elemNumber) {
     listItems[i].classList.remove("active");
   }
 
+  // Unhighlight currently highlighted text
+  const currentlyHighlighted = document.querySelectorAll(
+    "span[style='color: red;']"
+  );
+  currentlyHighlighted.forEach((element) => {
+    element.style["color"] = "#000";
+  });
+
   // Add 'active' tag for currently selected item
   var element = document.querySelector("." + elemNumber); //.getElementById(elemNumber);
   element.classList.add("active");
@@ -263,12 +271,6 @@ function getIndicesOfSubstring(str, substring) {
 
 function highlightWord(str, selectedWord) {
   // Reset other highlights
-  const currentlyHighlighted = document.querySelectorAll(
-    "span[style='color: red;']"
-  );
-  currentlyHighlighted.forEach((element) => {
-    element.style["color"] = "#000";
-  });
 
   const startingIndices = getIndicesOfSubstring(str, selectedWord);
   for (startIndex of startingIndices) {
