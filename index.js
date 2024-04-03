@@ -184,8 +184,11 @@ function generateAISuggestion(
   //quill editor functions
   const text = quill.getText(0);
 
-  //TODO FOR THE BACKEND: instead of console.logging the text, send to gpt!
+  //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!
   console.log(text);
+
+  title = "output from Claude";
+  body = "output from Claude";
 
   $(".list-group").eq(1).append(
     " <a href='#' onclick='selectCard(\"elem" +
@@ -200,7 +203,7 @@ function generateAISuggestion(
       "</div>" +
       "<p class='mb-1'>" +
       body +
-      "!</p></a>"
+      "</p></a>"
   );
   i++;
 } 
