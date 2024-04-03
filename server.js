@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "";
 
 // Serve static files from the 'public' directory
 app.use(express.static("."));
