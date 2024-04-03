@@ -262,6 +262,14 @@ function getIndicesOfSubstring(str, substring) {
 }
 
 function highlightWord(str, selectedWord) {
+  // Reset other highlights
+  const currentlyHighlighted = document.querySelectorAll(
+    "span[style='color: red;']"
+  );
+  currentlyHighlighted.forEach((element) => {
+    element.style["color"] = "#000";
+  });
+
   const startingIndices = getIndicesOfSubstring(str, selectedWord);
   for (startIndex of startingIndices) {
     quill.formatText(startIndex, selectedWord.length, "color", "red");
