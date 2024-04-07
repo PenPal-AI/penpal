@@ -10,12 +10,13 @@
   <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css" rel="stylesheet">
   <link href="/css/custom.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
   <!-- Nav Bar -->
-  <div class="bg-dark">
-    <nav class="container navbar navbar-expand-lg navbar-dark">
+  <div class="bg-secondary">
+    <nav class="container navbar navbar-expand-lg navbar-secondary">
       <div class="container-fluid">
         <a class="navbar-brand fs-3 fw-medium" href="#">
           <svg width="123" height="36" viewBox="0 0 123 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -48,8 +49,18 @@
 
         <!-- Text editor -->
         <div id="editor"></div>
-        <!-- Submit Button -->
-        <button id="submitText" class="btn btn-primary mt-3">Submit Text</button>
+
+        <br>
+
+        <div class="generate-button generate-button-hide">
+          <button type="button" onClick="generateAISuggestion()" class="suggest btn btn-secondary">Generate
+            Suggestion</button>
+          <p style="padding-left: 10px">Click the button to generate suggestions!</p>
+        </div>
+
+        <!-- Submit Button 
+          Why do we need this? This doesn't do anything
+        <button id="submitText" class="btn btn-secondary mt-3">Submit Text</button> -->
 
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
         <script src="index.js"></script>
@@ -92,13 +103,14 @@
       <div class="col-4 d-flex flex-column">
         <!-- Radio buttons for mode selection -->
         <ul class="btn-group p-0" id="pills-tab" role="tablist">
-          <button class="btn btn-outline-primary active" id="pills-write-tab" data-bs-toggle="pill"
-            data-bs-target="#pills-write" role="tab" aria-controls="pills-write" aria-selected="true">Write</button>
-          <button class="btn btn-outline-primary" id="pills-edit-tab" data-bs-toggle="pill" data-bs-target="#pills-edit"
-            role="tab" aria-controls="pills-edit" aria-selected="false">Edit</button>
-          <button class="btn btn-outline-primary" id="pills-suggest-tab" data-bs-toggle="pill"
-            data-bs-target="#pills-suggest" role="tab" aria-controls="pills-suggest"
-            aria-selected="false">Suggest</button>
+          <button class="btn btn-outline-info active" id="pills-write-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-write" role="tab" aria-controls="pills-write" onClick="writeMode()"
+            aria-selected="true">Write</button>
+          <button class="btn btn-outline-info" id="pills-edit-tab" data-bs-toggle="pill" data-bs-target="#pills-edit"
+            role="tab" aria-controls="pills-edit" aria-selected="false" onClick="editMode()">Edit</button>
+          <button class="btn btn-outline-info" id="pills-suggest-tab" data-bs-toggle="pill"
+            data-bs-target="#pills-suggest" role="tab" aria-controls="pills-suggest" aria-selected="false"
+            onClick="suggestMode()">Suggest</button>
         </ul>
 
         <!-- Write/Edit/Suggest content -->
@@ -109,22 +121,32 @@
           <!-- Edit mode content -->
           <div class="tab-pane h-100 p-3 fade" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab"
             tabindex="0">
-            <p>Editing suggestions</p>
+            <!--<p>Editing suggestions</p> -->
+
+            <div class="list-group editing-list">
+
+            </div>
+
           </div>
 
           <!-- Suggest mode content -->
           <div class="tab-pane h-100 p-3 fade" id="pills-suggest" role="tabpanel" aria-labelledby="pills-suggest-tab"
             tabindex="0">
-            <p>Pretend I'm a super impressive AI suggesting content for your writing!</p>
+
+            <!--<p>Suggest mode suggestions</p> -->
+
+            <div class="list-group suggestion-list">
+
+            </div>
+
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"></script>
+      <!-- Bootstrap JS -->
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
