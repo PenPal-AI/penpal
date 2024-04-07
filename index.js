@@ -14,21 +14,28 @@ window.onload = () => {
 //SUGGESTION GENERATION THINGS
 
 //different modes, controlled by buttons
+var isEditMode = false;
+
 function writeMode() {
+  isEditMode = false;
   hideButton();
   deleteEditingSuggestions();
   resetHighlights();
 }
 
 function suggestMode() {
+  isEditMode = false;
   showButton();
   deleteEditingSuggestions();
   resetHighlights();
 }
 
 function editMode() {
-  hideButton();
-  generateEdits();
+  if (!isEditMode) {
+    isEditMode = true;
+    hideButton();
+    generateEdits();
+  }
 }
 
 //filter for the text array
@@ -206,11 +213,11 @@ function generateAISuggestion(
   //quill editor functions
   const text = quill.getText(0);
 
-  //TODO FOR THE BACKEND: instead of console.logging the text, send to gpt!
+  //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!
   console.log(text);
   title = "output from Claude";
   body = "output from Claude";
-
+    
   $(".list-group")
     .eq(1)
     .append(
