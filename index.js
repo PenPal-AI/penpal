@@ -14,19 +14,28 @@ window.onload = () => {
 //SUGGESTION GENERATION THINGS
 
 //different modes, controlled by buttons
+var isEditMode = false;
+
 function writeMode() {
+  isEditMode = false;
   hideButton();
   deleteEditingSuggestions();
+  resetHighlights();
 }
 
 function suggestMode() {
+  isEditMode = false;
   showButton();
   deleteEditingSuggestions();
+  resetHighlights();
 }
 
 function editMode() {
-  hideButton();
-  generateEdits();
+  if (!isEditMode) {
+    isEditMode = true;
+    hideButton();
+    generateEdits();
+  }
 }
 
 //filter for the text array
@@ -58,7 +67,10 @@ function generateWordFrequencyEdits(
   $(".list-group")
     .eq(0)
     .append(
-      " <a href='#' onclick='selectCard(\"elem" +
+      " <a href='#' wordattr='" +
+        word +
+        `' typeattr='freq'` +
+        "onclick='selectCard(\"elem" +
         (j + 2).toString() +
         "\")' class='list-group-item editing-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
         (j + 2).toString() +
@@ -82,9 +94,8 @@ function generateWordFrequencyEdits(
 }
 
 //tokenize text
-function tokenize() {
+function tokenize(text) {
   //quill editor functions
-  const text = quill.getText(0);
 
   //remove punctuation
   var punctuation = /[\.,?!]/g;
@@ -99,7 +110,8 @@ function tokenize() {
 
 //generates editing suggestions
 function generateEdits() {
-  const filteredTextArray = tokenize();
+  const text = quill.getText(0);
+  const filteredTextArray = tokenize(text);
 
   //number of words in the array
   var numWords = filteredTextArray.length;
@@ -201,8 +213,10 @@ function generateAISuggestion(
   //quill editor functions
   const text = quill.getText(0);
 
-  //TODO FOR THE BACKEND: instead of console.logging the text, send to gpt!
+  //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!
   console.log(text);
+  title = "output from Claude";
+  body = "output from Claude";
 
   $(".list-group")
     .eq(1)
@@ -219,7 +233,7 @@ function generateAISuggestion(
         "</div>" +
         "<p class='mb-1'>" +
         body +
-        "!</p></a>"
+        "</p></a>"
     );
   i++;
 }
@@ -234,7 +248,47 @@ function selectCard(elemNumber) {
     listItems[i].classList.remove("active");
   }
 
+  resetHighlights();
+
   // Add 'active' tag for currently selected item
   var element = document.querySelector("." + elemNumber); //.getElementById(elemNumber);
   element.classList.add("active");
+
+  console.log(element);
+  // get type of card
+  if (element.getAttribute("typeattr") === "freq") {
+    const selectedWord = element.getAttribute("wordattr");
+    highlightWord(quill.getText(0), selectedWord);
+  }
+}
+
+function resetHighlights() {
+  // Unhighlight currently highlighted text
+  const currentlyHighlighted = document.querySelectorAll(
+    "span[style='color: red;']"
+  );
+  currentlyHighlighted.forEach((element) => {
+    element.style["color"] = "#000";
+  });
+}
+
+function getIndicesOfSubstring(str, substring) {
+  const startingIndices = [];
+  let indexOccurence = str.indexOf(substring, 0);
+
+  while (indexOccurence >= 0) {
+    startingIndices.push(indexOccurence);
+
+    indexOccurence = str.indexOf(substring, indexOccurence + 1);
+  }
+  return startingIndices;
+}
+
+function highlightWord(str, selectedWord) {
+  // Reset other highlights
+
+  const startingIndices = getIndicesOfSubstring(str, selectedWord);
+  for (startIndex of startingIndices) {
+    quill.formatText(startIndex, selectedWord.length, "color", "red");
+  }
 }

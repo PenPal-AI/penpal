@@ -72,30 +72,30 @@
           });
 
           // Function to send text to backend
-          function sendTextToBackend() {
-            // Get text from Quill editor
-            const text = quill.getText();
+          // // function sendTextToBackend() {
+          // //   // Get text from Quill editor
+          // //   const text = quill.getText();
 
-            // Send text to backend using fetch API
-            fetch('/analyze-text', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ text: text.trim() }),
-            })
-              .then(response => response.json())
-              .then(data => {
-                console.log('Success:', data);
-                // Handle response data here
-              })
-              .catch((error) => {
-                console.error('Error:', error);
-              });
-          }
+          // //   // Send text to backend using fetch API
+          // //   fetch('/analyze-text', {
+          // //     method: 'POST',
+          // //     headers: {
+          // //       'Content-Type': 'application/json',
+          // //     },
+          // //     body: JSON.stringify({ text: text.trim() }),
+          // //   })
+          // //   .then(response => response.json())
+          // //   .then(data => {
+          // //     console.log('Success:', data);
+          // //     // Handle response data here
+          // //   })
+          // //   .catch((error) => {
+          // //     console.error('Error:', error);
+          // //   });
+          // // }
 
-          // Add event listener to the submit button
-          document.getElementById('submitText').addEventListener('click', sendTextToBackend);
+          // // Add event listener to the submit button
+          // document.getElementById('submitText').addEventListener('click', sendTextToBackend);
         </script>
       </div>
 
@@ -142,11 +142,12 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Bootstrap JS -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"></script>
 </body>
 
 </html>
