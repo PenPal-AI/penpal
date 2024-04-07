@@ -208,6 +208,8 @@ function generateAISuggestion(
 
   //TODO FOR THE BACKEND: instead of console.logging the text, send to gpt!
   console.log(text);
+  title = "output from Claude";
+  body = "output from Claude";
 
   $(".list-group")
     .eq(1)
@@ -224,7 +226,7 @@ function generateAISuggestion(
         "</div>" +
         "<p class='mb-1'>" +
         body +
-        "!</p></a>"
+        "</p></a>"
     );
   i++;
 }
