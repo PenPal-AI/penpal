@@ -17,11 +17,13 @@ window.onload = () => {
 function writeMode() {
   hideButton();
   deleteEditingSuggestions();
+  resetHighlights();
 }
 
 function suggestMode() {
   showButton();
   deleteEditingSuggestions();
+  resetHighlights();
 }
 
 function editMode() {
@@ -237,13 +239,7 @@ function selectCard(elemNumber) {
     listItems[i].classList.remove("active");
   }
 
-  // Unhighlight currently highlighted text
-  const currentlyHighlighted = document.querySelectorAll(
-    "span[style='color: red;']"
-  );
-  currentlyHighlighted.forEach((element) => {
-    element.style["color"] = "#000";
-  });
+  resetHighlights();
 
   // Add 'active' tag for currently selected item
   var element = document.querySelector("." + elemNumber); //.getElementById(elemNumber);
@@ -255,6 +251,16 @@ function selectCard(elemNumber) {
     const selectedWord = element.getAttribute("wordattr");
     highlightWord(quill.getText(0), selectedWord);
   }
+}
+
+function resetHighlights() {
+  // Unhighlight currently highlighted text
+  const currentlyHighlighted = document.querySelectorAll(
+    "span[style='color: red;']"
+  );
+  currentlyHighlighted.forEach((element) => {
+    element.style["color"] = "#000";
+  });
 }
 
 function getIndicesOfSubstring(str, substring) {
