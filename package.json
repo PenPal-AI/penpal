@@ -4,14 +4,15 @@
     "description": "A web application for text editing with grammar correction using Quill and Express.js.",
     "main": "server.js",
     "scripts": {
-      "start": "node server.js"
+        "start": "node server.js"
     },
     "author": "Your Name",
     "license": "ISC",
     "dependencies": {
-      "express": "^4.17.1",
-      "body-parser": "^1.19.0",
-      "axios": "^0.21.1"
+        "axios": "^0.21.1",
+        "body-parser": "^1.19.0",
+        "bootstrap": "^5.3.3",
+        "express": "^4.17.1",
+        "sass": "^1.71.1"
     }
-  }
-  
+}

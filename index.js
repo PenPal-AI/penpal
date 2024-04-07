@@ -217,7 +217,7 @@ function generateAISuggestion(
   console.log(text);
   title = "output from Claude";
   body = "output from Claude";
-    
+
   $(".list-group")
     .eq(1)
     .append(
