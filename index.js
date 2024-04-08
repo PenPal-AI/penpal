@@ -34,7 +34,16 @@ function suggestMode() {
   resetHighlights();
   // TODO: Update prompting
   generateAISuggestion(
-    (prompt = "Confirm that the API is working, this is a test")
+    ("Give the user suggestions to improve the flow of their writing",
+    "Research Paper")
+  );
+  generateAISuggestion(
+    ("Conduct a sentiment analysis on the user's writing and suggest how to make their tone more consistent",
+    "Argumentative Essay")
+  );
+  generateAISuggestion(
+    ("Based on what the user has written so far, suggest a few directions for the user to pursue",
+    "Professional Email")
   );
 }
 
@@ -214,16 +223,23 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button
 //when we generate suggestions in the backend, call this function
-async function call_LLM(
-  prompt = "Hello! Testing",
-  url = `https://api.openai.com/v1/completions`
-) {
+async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle) {
   const data = {
     model: "gpt-3.5-turbo",
     messages: [
       {
+        role: "system",
+        content:
+          "You are an AI agent intended to help users learn to write. Provide helpful, safe, and enthusiastic suggestions to help users improve their writing skills.",
+      },
+      {
+        role: "system",
+        content: `The user will supply input text. Your prompt is: ${prompt} \
+        The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing points in their writing where they can improve.`,
+      },
+      {
         role: "user",
-        content: prompt,
+        content: text,
       },
     ],
     temperature: 1,
@@ -247,13 +263,11 @@ async function call_LLM(
   return message;
 }
 
-async function generateAISuggestion(prompt = "Hello world testing!") {
+async function generateAISuggestion(prompt, writingStyle) {
   //quill editor functions
   const text = quill.getText(0);
 
-  //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!
-
-  const response = await call_LLM(prompt);
+  const response = await call_LLM(prompt, text, writingStyle);
   title = "output from LLM";
   body = response;
 
@@ -293,7 +307,6 @@ function selectCard(elemNumber) {
   var element = document.querySelector("." + elemNumber); //.getElementById(elemNumber);
   element.classList.add("active");
 
-  console.log(element);
   // get type of card
   if (element.getAttribute("typeattr") === "freq") {
     const selectedWord = element.getAttribute("wordattr");
