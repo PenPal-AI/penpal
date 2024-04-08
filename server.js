@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // **INSERT THE API KEY HERE**
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 
 // Serve static files from the 'public' directory
 app.use(express.static("."));
