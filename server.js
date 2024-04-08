@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios');
-const path = require('path');
+const path = require('path'); // Import the 'path' module
 
 const app = express();
 const port = process.env.PORT || 3000;
+console.log("port: ", port);
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
@@ -12,77 +13,59 @@ app.use(bodyParser.json());
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-const CLAUDE_API_KEY = 'your_claude_api_key';
-const CLAUDE_API_URL = 'https://api.anthropic.com/v1/complete';
+// **INSERT THE API KEY HERE**
+const OPENAI_API_KEY = "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";
+
+// Serve static files from the 'public' directory
+app.use(express.static("."));
+app.set('view engine', 'html');
+app.get('/', function(req, res) {
+        res.render('index');
+});
 
 app.post('/analyze-text', async (req, res) => {
-  const { text } = req.body;
+    const { text } = req.body;
+    console.log('Received text:', text)
+    if (!text) {
+        return res.status(400).json({ error: 'No text provided' });
+    }
 
-  if (!text) {
-    return res.status(400).json({ error: 'No text provided' });
-  }
+    try {
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
+            {
+                model: "gpt-3.5-turbo-0125",
+                messages: [
+                    {
+                    role: "user",
+                    content: `Review the following student writing for any grammar, spelling, and punctuation errors:\n\n"${text}"\n\nProvide corrections and explanations:`,
+                    }
+                ],
+                temperature: 1,
+                max_tokens: 256,
+                top_p: 1,
+                frequency_penalty: 0,
+                presence_penalty: 0
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
 
-  try {
-    const response = await axios.post(
-      CLAUDE_API_URL,
-      {
-        prompt: `Review the following text for any grammar, spelling, and punctuation errors:\n\n"${text}"\n\nProvide corrections and explanations:`,
-        model: 'claude-v1',
-        max_tokens_to_sample: 250,
-        stop_sequences: ['\n'],
-        temperature: 0.5,
-        top_p: 1,
-      },
-      {
-        headers: {
-          'x-api-key': CLAUDE_API_KEY,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+        const corrections = response.data.choices[0].message.content.trim();
 
-    const corrections = response.data.completion.trim();
-    res.json({ originalText: text, corrections });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to analyze text' });
-  }
+        res.json({ originalText: text, corrections });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Failed to analyze text' });
+    }
 });
 
-app.post('/generate-suggestion', async (req, res) => {
-  const { text } = req.body;
-
-  if (!text) {
-    return res.status(400).json({ error: 'No text provided' });
-  }
-
-  try {
-    const response = await axios.post(
-      CLAUDE_API_URL,
-      {
-        prompt: `Provide suggestions to improve the following text:\n\n"${text}"\n\nSuggestions:`,
-        model: 'claude-v1',
-        max_tokens_to_sample: 250,
-        stop_sequences: ['\n'],
-        temperature: 0.5,
-        top_p: 1,
-      },
-      {
-        headers: {
-          'x-api-key': CLAUDE_API_KEY,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    const suggestions = response.data.completion.trim();
-    res.json({ originalText: text, suggestions });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to generate suggestions' });
-  }
-});
+// Remove the previous app.get('/') route handler
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+    console.log(`Server is running on port ${port}`);
 });
