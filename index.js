@@ -1,5 +1,9 @@
 //QUILL THINGS
+
+let OPENAI_API_KEY;
+
 window.onload = () => {
+  OPENAI_API_KEY = prompt("Please enter your OpenAI API Key: ");
   //  Listener to cache text on changes
   quill.on("text-change", () => {
     var text = quill.getSemanticHTML();
@@ -13,8 +17,8 @@ window.onload = () => {
 
 //modal / popup
 
-var modal = document.getElementById('id01');
-var textarea = document.getElementById('message-text');
+var modal = document.getElementById("id01");
+var textarea = document.getElementById("message-text");
 
 //TODO:  TEXT TYPE AND ASSIGNMENT DETAILS TO BE SENT TO BACKEND
 var textType = "";
@@ -26,20 +30,18 @@ function closeModal() {
   modal.style.display = "none";
 }
 
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-}
+};
 
 function setText(text) {
   var btn = document.getElementById("writing-type");
   textType = text;
-  text = text + " ▼"
+  text = text + " ▼";
   btn.innerHTML = text;
 }
-
-
 
 //SUGGESTION GENERATION THINGS
 
@@ -58,6 +60,19 @@ function suggestMode() {
   showButton();
   deleteEditingSuggestions();
   resetHighlights();
+  // TODO: Update prompting
+  generateAISuggestion(
+    ("Give the user suggestions to improve the flow of their writing",
+    "Research Paper")
+  );
+  generateAISuggestion(
+    ("Conduct a sentiment analysis on the user's writing and suggest how to make their tone more consistent",
+    "Argumentative Essay")
+  );
+  generateAISuggestion(
+    ("Based on what the user has written so far, suggest a few directions for the user to pursue",
+    "Professional Email")
+  );
 }
 
 function editMode() {
@@ -236,17 +251,53 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button
 //when we generate suggestions in the backend, call this function
-function generateAISuggestion(
-  body = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-  title = "new AI suggestion"
-) {
+async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle) {
+  const data = {
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are an AI agent intended to help users learn to write. Provide helpful, safe, and enthusiastic suggestions to help users improve their writing skills.",
+      },
+      {
+        role: "system",
+        content: `The user will supply input text. Your prompt is: ${prompt} \
+        The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing points in their writing where they can improve.`,
+      },
+      {
+        role: "user",
+        content: text,
+      },
+    ],
+    temperature: 1,
+    max_tokens: 256,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+  };
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const res = await response.json();
+  const message = res.choices[0].message.content;
+  return message;
+}
+
+async function generateAISuggestion(prompt, writingStyle) {
   //quill editor functions
   const text = quill.getText(0);
 
-  //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!
-  console.log(text);
-  title = "output from Claude";
-  body = "output from Claude";
+  const response = await call_LLM(prompt, text, writingStyle);
+  title = "output from LLM";
+  body = response;
 
   $(".list-group")
     .eq(1)
@@ -284,7 +335,6 @@ function selectCard(elemNumber) {
   var element = document.querySelector("." + elemNumber); //.getElementById(elemNumber);
   element.classList.add("active");
 
-  //console.log(element);
   // get type of card
   if (element.getAttribute("typeattr") === "freq") {
     const selectedWord = element.getAttribute("wordattr");
