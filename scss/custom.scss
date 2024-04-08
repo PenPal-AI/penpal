@@ -6,4 +6,26 @@ $secondary: #30b37c;
   background-color: #fff;
 }
 
+#main-content {
+  margin-top: 30px;
+}
+
+#editor {
+  height: 800px;
+  max-height: 65%;
+}
+
+.tab-pane {
+  overflow-y: auto;
+  max-height: 75vh;
+}
+
+.generate-button-show {
+  display: flex;
+}
+
+.generate-button-hide {
+  display: none;
+}
+
 @import "../node_modules/bootstrap/scss/bootstrap";
