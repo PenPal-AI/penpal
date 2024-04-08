@@ -124,44 +124,56 @@
           });
 
           // Function to send text to backend
-          function sendTextToBackend() {
-            // Get text from Quill editor
-            const text = quill.getText();
+          function sendTextToBackend(inputText) {
+            return new Promise((resolve, reject) => {
+              // Get text from Quill editor
+              const text = quill.getText();
 
-            // Send text to backend using fetch API
-            fetch('/analyze-text', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ text: text.trim() }),
-            })
-            .then(response => response.json())
-            .then(data => {
-              // Get the container element
-              const suggestionContainer = document.getElementById('SuggestionContainer');
-
-              // Check if corrections field exists in the response
-              if (data.corrections) {
-                const formattedCorrections = data.corrections.replace(/\"/g, ''); // Remove extra quotes
-                // Set the text content of the container to the formatted corrections
-                suggestionContainer.textContent = formattedCorrections;
-              }
-               else {
-                  // If no corrections found, display a message
-                suggestionContainer.textContent = 'No corrections found.';
-              }
-
-              // Handle response data here
+              const textToSend = inputText ? String(inputText).trim() : quill.getText().trim();
               
-            })
-            .catch((error) => {
-              console.error('Error:', error);
-            });
+              // Check if there is any text to analyze
+              if (textToSend.length === 0) {
+                  reject('No text provided.');
+                  return;
+}
+
+              // Send text to backend using fetch API
+              fetch('/analyze-text', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: textToSend }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                // Get the container element
+                const suggestionContainer = document.getElementById('SuggestionContainer');
+
+                // Check if corrections field exists in the response
+                if (data.corrections) {
+                  const formattedCorrections = data.corrections.replace(/\"/g, ''); // Remove extra quotes
+                  // Resolve the Promise with the formatted corrections
+                  resolve(formattedCorrections);
+                  // Set the text content of the container to the formatted corrections
+                  // suggestionContainer.textContent = formattedCorrections;
+                }
+                else {
+                    // If no corrections found, display a message
+                  // suggestionContainer.textContent = 'No corrections found.';
+                }
+
+                // Handle response data here
+                
+              })
+              .catch((error) => {
+                console.error('Error:', error);
+              });
+          });
           }
 
           // Add event listener to the submit button
-          document.getElementById('submitText').addEventListener('click', sendTextToBackend);
+          // document.getElementById('submitText').addEventListener('click', sendTextToBackend);
         </script>
       </div>
 

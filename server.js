@@ -38,7 +38,8 @@ app.post('/analyze-text', async (req, res) => {
                 messages: [
                     {
                     role: "user",
-                    content: `Review the following student writing for any grammar, spelling, and punctuation errors:\n\n"${text}"\n\nProvide corrections and explanations:`,
+                    content: `Review the following student writing:\n\n"${text}"\n\nProvide suggestions for expanding on existing ideas or arguments.
+                    Provide insight on tone (give suggestions and explanations on whether or not the tone matches the assignment and genre):`,
                     }
                 ],
                 temperature: 1,

@@ -11,36 +11,6 @@ window.onload = () => {
   quill.clipboard.dangerouslyPasteHTML(cachedText);
 };
 
-//modal / popup
-
-var modal = document.getElementById('id01');
-var textarea = document.getElementById('message-text');
-
-//TODO:  TEXT TYPE AND ASSIGNMENT DETAILS TO BE SENT TO BACKEND
-var textType = "";
-var assignment = "";
-
-function closeModal() {
-  assignment = textarea.value;
-  console.log(assignment);
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-function setText(text) {
-  var btn = document.getElementById("writing-type");
-  textType = text;
-  text = text + " ▼"
-  btn.innerHTML = text;
-}
-
-
-
 //SUGGESTION GENERATION THINGS
 
 //different modes, controlled by buttons
@@ -236,17 +206,26 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button
 //when we generate suggestions in the backend, call this function
-function generateAISuggestion(
+async function generateAISuggestion(
   body = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
   title = "new AI suggestion"
 ) {
   //quill editor functions
   const text = quill.getText(0);
 
-  //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!
-  console.log(text);
   title = "output from Claude";
   body = "output from Claude";
+
+  //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!
+  try {
+    const formattedCorrections = await sendTextToBackend();
+    console.log(formattedCorrections);
+    body = formattedCorrections;
+    console.log(body); // Now you have access to the updated 'body' variable
+  } catch (error) {
+      console.error('Error:', error);
+  }
+
 
   $(".list-group")
     .eq(1)
@@ -284,7 +263,7 @@ function selectCard(elemNumber) {
   var element = document.querySelector("." + elemNumber); //.getElementById(elemNumber);
   element.classList.add("active");
 
-  //console.log(element);
+  console.log(element);
   // get type of card
   if (element.getAttribute("typeattr") === "freq") {
     const selectedWord = element.getAttribute("wordattr");
