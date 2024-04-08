@@ -213,7 +213,7 @@ async function generateAISuggestion(
   //quill editor functions
   const text = quill.getText(0);
 
-  title = "output from Claude";
+  title = "Suggestion";
   body = "output from Claude";
 
   //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!

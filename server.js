@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 // **INSERT THE API KEY HERE**
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "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";
 
 // Serve static files from the 'public' directory
 app.use(express.static("."));
@@ -26,9 +26,31 @@ app.get('/', function(req, res) {
 app.post('/analyze-text', async (req, res) => {
     const { text } = req.body;
     console.log('Received text:', text)
+
+    option = 'persuasive';
+
+    let prompt;
+    if (option === 'academic') {
+        prompt = `I am writing an academic paper. Review my writing and respond in the second person:\n\n"${text}"\n\nProvide suggestions for expanding on existing ideas or arguments.
+        Provide insight on tone (give suggestions and explanations on whether or not the tone matches the assignment and genre). Offer suggestions for integrating quotes or references, Which sentences or ideas should be expanded on through analysis or additional evidence?:`;
+    } else if (option === 'research') {
+        prompt = `I am writing a research paper. Review the my writing and respond in the second person:\n\n"${text}"\n\nProvide suggestions for expanding on existing ideas or arguments.
+        Provide insight on tone (give suggestions and explanations on whether or not the tone matches the assignment and genre). How can the clarity of writing flow improve from introduction to body to conclusion? Make suggestions as to how they can expand on meaningful analysis or additional evidence research`;
+    } else if (option === 'persuasive') {
+        prompt = `I am writing a persuasive essay. Review the my writing and respond in the second person:\n\n"${text}"\n\nProvide suggestions for expanding on existing ideas or arguments.
+        Provide insight on tone (give suggestions and explanations on whether or not the tone matches the assignment and genre).Offer suggestions for developing a stronger thesis statement or main argument.
+        Provide prompts to help brainstorm potential counterarguments:`;
+    } else if (option === 'profemail') {
+        prompt = `I am writing a professional email. Review the my writing and respond in the second person:\n\n"${text}"\n\nProvide suggestions for expanding on existing ideas or arguments.
+        Provide insight on tone (give suggestions and explanations on whether or not the tone matches the assignment and genre). Offer suggestions for professional greetings and verbiage`;
+    } else {
+        return res.status(400).json({ error: 'Invalid option selected' });
+    }
+
     if (!text) {
         return res.status(400).json({ error: 'No text provided' });
     }
+
 
     try {
         const response = await axios.post(
@@ -38,7 +60,7 @@ app.post('/analyze-text', async (req, res) => {
                 messages: [
                     {
                     role: "user",
-                    content: `Review the following student writing:\n\n"${text}"\n\nProvide suggestions for expanding on existing ideas or arguments.
+                    content: `Review the my writing and respond in the second person:\n\n"${text}"\n\nProvide suggestions for expanding on existing ideas or arguments.
                     Provide insight on tone (give suggestions and explanations on whether or not the tone matches the assignment and genre):`,
                     }
                 ],
