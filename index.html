@@ -58,11 +58,6 @@
 
         <br>
 
-        <div class="generate-button generate-button-hide">
-          <button type="button" onClick="generateAISuggestion()" class="suggest btn btn-secondary">Generate
-            Suggestion</button>
-          <p style="padding-left: 10px">Click the button to generate suggestions!</p>
-        </div>
 
         <div class="w3-container">
           <button type="button" onclick="document.getElementById('id01').style.display='block'" class="btn btn-secondary">Customize Suggestions</button>
@@ -92,8 +87,8 @@
                 <br>
                 
                 <div class="w3-container">
-                  <label for="message-text" class="col-form-label">Copy / paste your assignment or describe your goals for this writing:</label>
-                            <textarea class="form-control" id="message-text" style="height: 150px"></textarea>
+                  <label for="message-text" class="col-form-label">Copy / paste your assignment or describe your goals for this writing:</label>      
+                  <textarea class="form-control" id="message-text" style="height: 150px"></textarea>
                             <br>
                             <button type="button" class="btn btn-secondary" onClick="closeModal()">Submit</button>
                             <br>
@@ -105,6 +100,15 @@
             </div>
           </div>
         </div>
+
+        <br>
+        
+        <div class="w3-container">
+        <div class="generate-button generate-button-hide">
+          <button type="button" onClick="generateAISuggestion()" class="suggest btn btn-secondary">Generate
+            Suggestion</button>
+          <p style="padding-left: 10px">Click the button to generate suggestions!</p>
+        </div> </div>
 
         <!-- Submit Button 
           Why do we need this? This doesn't do anything
