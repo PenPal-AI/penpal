@@ -11,6 +11,36 @@ window.onload = () => {
   quill.clipboard.dangerouslyPasteHTML(cachedText);
 };
 
+//modal / popup
+
+var modal = document.getElementById('id01');
+var textarea = document.getElementById('message-text');
+
+//TODO:  TEXT TYPE AND ASSIGNMENT DETAILS TO BE SENT TO BACKEND
+var textType = "";
+var assignment = "";
+
+function closeModal() {
+  assignment = textarea.value;
+  console.log(assignment);
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+function setText(text) {
+  var btn = document.getElementById("writing-type");
+  textType = text;
+  text = text + " ▼"
+  btn.innerHTML = text;
+}
+
+
+
 //SUGGESTION GENERATION THINGS
 
 //different modes, controlled by buttons
@@ -254,7 +284,7 @@ function selectCard(elemNumber) {
   var element = document.querySelector("." + elemNumber); //.getElementById(elemNumber);
   element.classList.add("active");
 
-  console.log(element);
+  //console.log(element);
   // get type of card
   if (element.getAttribute("typeattr") === "freq") {
     const selectedWord = element.getAttribute("wordattr");
