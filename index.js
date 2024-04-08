@@ -1,5 +1,9 @@
 //QUILL THINGS
+
+let OPENAI_API_KEY;
+
 window.onload = () => {
+  OPENAI_API_KEY = prompt("Please enter your OpenAI API Key: ");
   //  Listener to cache text on changes
   quill.on("text-change", () => {
     var text = quill.getSemanticHTML();
@@ -28,6 +32,10 @@ function suggestMode() {
   showButton();
   deleteEditingSuggestions();
   resetHighlights();
+  // TODO: Update prompting
+  generateAISuggestion(
+    (prompt = "Confirm that the API is working, this is a test")
+  );
 }
 
 function editMode() {
@@ -206,17 +214,48 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button
 //when we generate suggestions in the backend, call this function
-function generateAISuggestion(
-  body = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-  title = "new AI suggestion"
+async function call_LLM(
+  prompt = "Hello! Testing",
+  url = `https://api.openai.com/v1/completions`
 ) {
+  const data = {
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "user",
+        content: prompt,
+      },
+    ],
+    temperature: 1,
+    max_tokens: 256,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+  };
+
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const res = await response.json();
+  const message = res.choices[0].message.content;
+  return message;
+}
+
+async function generateAISuggestion(prompt = "Hello world testing!") {
   //quill editor functions
   const text = quill.getText(0);
 
   //TODO FOR THE BACKEND: instead of console.logging the text, send to Claude!
-  console.log(text);
-  title = "output from Claude";
-  body = "output from Claude";
+
+  const response = await call_LLM(prompt);
+  title = "output from LLM";
+  body = response;
 
   $(".list-group")
     .eq(1)
