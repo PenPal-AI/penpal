@@ -254,17 +254,23 @@ async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assi
       },
       {
         role: "system",
-        content: `The user will supply input text. Your prompt is: ${prompt} \
+        content: "The user will supply input text. Your prompt is: ${prompt} \
         The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing points in their writing where they can improve. \
-        The user's goal is: ${assignment}, so make sure that your suggestions help the user achieve that goal.`,
+        The user's goal is: ${assignment}, so make sure that your suggestions help the user achieve that goal."
       },
+
+      {
+        role: "system",
+        content: "Limit the response to 200 tokens to keep the suggestions concise. Provide one specific example and actionable advice with references to the user's text. Provide specific advice without rewriting the tect. Do not rewrite more than one sentence for them.",
+      },
+ 
       {
         role: "user",
         content: text,
       },
     ],
     temperature: 1,
-    max_tokens: 256,
+    max_tokens: 200,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
