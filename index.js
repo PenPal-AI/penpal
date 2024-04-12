@@ -63,15 +63,7 @@ function suggestMode() {
   // TODO: Update prompting
   generateAISuggestion(
     ("Give the user suggestions to improve the flow of their writing",
-    "Research Paper")
-  );
-  generateAISuggestion(
-    ("Conduct a sentiment analysis on the user's writing and suggest how to make their tone more consistent",
-    "Argumentative Essay")
-  );
-  generateAISuggestion(
-    ("Based on what the user has written so far, suggest a few directions for the user to pursue",
-    "Professional Email")
+    textType, assignment)
   );
 }
 
@@ -251,7 +243,7 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button
 //when we generate suggestions in the backend, call this function
-async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle) {
+async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assignment) {
   const data = {
     model: "gpt-3.5-turbo",
     messages: [
@@ -263,7 +255,8 @@ async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle) {
       {
         role: "system",
         content: `The user will supply input text. Your prompt is: ${prompt} \
-        The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing points in their writing where they can improve.`,
+        The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing points in their writing where they can improve. \
+        The user's goal is: ${assignment}, so make sure that your suggestions help the user achieve that goal.`,
       },
       {
         role: "user",
@@ -291,11 +284,11 @@ async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle) {
   return message;
 }
 
-async function generateAISuggestion(prompt, writingStyle) {
+async function generateAISuggestion(prompt, writingStyle, assignment) {
   //quill editor functions
   const text = quill.getText(0);
 
-  const response = await call_LLM(prompt, text, writingStyle);
+  const response = await call_LLM(prompt, text, writingStyle, assignment);
   title = "output from LLM";
   body = response;
 
