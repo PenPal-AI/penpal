@@ -21,7 +21,7 @@ var modal = document.getElementById("id01");
 var textarea = document.getElementById("message-text");
 
 //TODO:  TEXT TYPE AND ASSIGNMENT DETAILS TO BE SENT TO BACKEND
-var textType = "";
+var textType = "Other";
 var assignment = "";
 
 function closeModal() {
@@ -178,6 +178,7 @@ function generateEdits() {
   }
 
   //temporary way to generate suggestions
+  /*
   numOfSuggestions = 4;
   title = "new suggestion";
   body = "body of suggestion";
@@ -207,6 +208,7 @@ function generateEdits() {
       j++;
     }
   }
+  */
 }
 
 //delete editing suggestions when clicked away from the editing tab
