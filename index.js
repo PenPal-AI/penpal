@@ -252,18 +252,25 @@ async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assi
       {
         role: "system",
         content:
-          "You are an AI agent intended to help users learn to write. Provide helpful, safe, and enthusiastic suggestions to help users improve their writing skills.",
+          "You are an AI agent intended to help users learn to write. Provide helpful suggestions to help users improve their writing skills.\
+          Generate 10 distinct suggestions",
       },
       {
         role: "system",
         content: "The user will supply input text. Your prompt is: ${prompt} \
-        The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing points in their writing where they can improve. \
-        The user's goal is: ${assignment}, so make sure that your suggestions help the user achieve that goal."
+        The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing specific point (examples) in their writing where they can improve. \
+        The user's goal is: ${assignment}, verify that the user's writing is on track to meet that goal."
       },
 
       {
         role: "system",
-        content: "Limit the response to 200 tokens to keep the suggestions concise. Provide one specific example and actionable advice with references to the user's text. Provide specific advice without rewriting the tect. Do not rewrite more than one sentence for them.",
+        content: "Limit the response to 200 tokens per suggestion to keep each suggestion concise. Provide one specific example and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
+      },
+
+      {
+        role: "system",
+        content:
+          "Generate the output of the suggestions so that there is a short title and a body of text. The title should be the of the suggestion, and the body should contain the suggestion itself.",
       },
  
       {
