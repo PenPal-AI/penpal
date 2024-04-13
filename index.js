@@ -3,7 +3,6 @@
 let OPENAI_API_KEY;
 
 window.onload = () => {
-  OPENAI_API_KEY = prompt("Please enter your OpenAI API Key: ");
   //  Listener to cache text on changes
   quill.on("text-change", () => {
     var text = quill.getSemanticHTML();
@@ -13,6 +12,7 @@ window.onload = () => {
   //   Load cached text and set text editor contents
   var cachedText = localStorage.getItem("text") || "";
   quill.clipboard.dangerouslyPasteHTML(cachedText);
+  OPENAI_API_KEY = prompt("Please enter your OpenAI API Key: ");
 };
 
 //modal / popup
@@ -21,7 +21,7 @@ var modal = document.getElementById("id01");
 var textarea = document.getElementById("message-text");
 
 //TODO:  TEXT TYPE AND ASSIGNMENT DETAILS TO BE SENT TO BACKEND
-var textType = "Other";
+var textType = "";
 var assignment = "";
 
 function closeModal() {
@@ -61,9 +61,26 @@ function suggestMode() {
   deleteEditingSuggestions();
   resetHighlights();
   // TODO: Update prompting
+}
+
+function generateAISuggestionWrapper() {
   generateAISuggestion(
-    ("Give the user suggestions to improve the flow of their writing",
-    textType, assignment)
+    "Which sentences or ideas should be expanded on through analysis or additional evidence? Make suggestions as to how they can expand on meaningful analysis or additional evidence research.",
+    textType,
+    assignment,
+    "Areas to expand on"
+  );
+  generateAISuggestion(
+    "Explain why opening hooks are important and give an example of one which would fit into the text. Be very concise and use plain text.",
+    textType,
+    assignment,
+    "Use an opening hook"
+  );
+  generateAISuggestion(
+    "Provide guidance on narrative structure and pacing, giving one specific example of where the user can improve their flow",
+    textType,
+    assignment,
+    "Narrative structure and pacing"
   );
 }
 
@@ -178,7 +195,6 @@ function generateEdits() {
   }
 
   //temporary way to generate suggestions
-  /*
   numOfSuggestions = 4;
   title = "new suggestion";
   body = "body of suggestion";
@@ -208,7 +224,6 @@ function generateEdits() {
       j++;
     }
   }
-  */
 }
 
 //delete editing suggestions when clicked away from the editing tab
@@ -245,20 +260,18 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button
 //when we generate suggestions in the backend, call this function
-async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assignment) {
+async function call_LLM(
+  prompt = "Hello! Testing",
+  text = "",
+  writingStyle,
+  assignmentDetails
+) {
   const data = {
     model: "gpt-3.5-turbo",
     messages: [
       {
         role: "system",
-        content:
-          "You are an AI agent intended to help users learn to write. Provide helpful, safe, and enthusiastic suggestions to help users improve their writing skills.",
-      },
-      {
-        role: "system",
-        content: `The user will supply input text. Your prompt is: ${prompt} \
-        The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing points in their writing where they can improve. \
-        The user's goal is: ${assignment}, so make sure that your suggestions help the user achieve that goal.`,
+        content: prompt,
       },
       {
         role: "user",
@@ -271,6 +284,8 @@ async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assi
     frequency_penalty: 0,
     presence_penalty: 0,
   };
+
+  console.log(JSON.stringify(data));
 
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -286,12 +301,21 @@ async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assi
   return message;
 }
 
-async function generateAISuggestion(prompt, writingStyle, assignment) {
+async function generateAISuggestion(
+  prompt,
+  writingStyle,
+  assignmentDetails,
+  title
+) {
   //quill editor functions
   const text = quill.getText(0);
 
-  const response = await call_LLM(prompt, text, writingStyle, assignment);
-  title = "output from LLM";
+  const response = await call_LLM(
+    prompt,
+    text,
+    writingStyle,
+    assignmentDetails
+  );
   body = response;
 
   $(".list-group")
@@ -347,16 +371,18 @@ function resetHighlights() {
   });
 }
 
-function getIndicesOfSubstring(str, substring) {
-  const startingIndices = [];
-  let indexOccurence = str.indexOf(substring, 0);
+function getIndicesOfSubstring(string, substring) {
+  let indices = [];
 
-  while (indexOccurence >= 0) {
-    startingIndices.push(indexOccurence);
+  // Regular expression to match word boundaries
+  let regex = new RegExp("\\b" + substring + "\\b", "gi");
 
-    indexOccurence = str.indexOf(substring, indexOccurence + 1);
+  // Loop through matches
+  while ((match = regex.exec(string)) !== null) {
+    indices.push(match.index);
   }
-  return startingIndices;
+
+  return indices;
 }
 
 function highlightWord(str, selectedWord) {
