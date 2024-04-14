@@ -245,7 +245,58 @@ var i = 0;
 //generalized generate suggestions function
 //currently uses a button
 //when we generate suggestions in the backend, call this function
-async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assignment) {
+
+function getprompt(writingStyle, assignment){
+  
+  if (writingStyle == "Email / Communication"){
+    prompt = "**Subject/Objective**\
+    What is an appropriate subject line for this email? Give 3 suggestions.\
+    If there is no clear question, prompt the user to clarify their ask.\
+    Are there proper greetings/sign-off?\
+    Is there a heading line?\
+    Are there closing salutations?\
+    Is there a signature after the closing remarks? Suggest one, if not.\
+    **Tone**\
+    Are there instances of casual or rude tone? Quote an example from the text. If there is no example, return null.\
+    ";
+  } else if (writingStyle == "Research Paper"){
+    prompt = "**Research paper objective**\
+    Is there a clear research question? Does it align with the given assignment description? How can the research question be improved? Could the research question be moved to a different place in the paper?\
+    Does the thesis comprehensively answer the research question? Does the thesis comprehensively answer the assignment directions?]\
+    How can the thesis be more analytical?\
+    **Argument alignment**\
+    Are the arguments mentioned in the thesis found in the body paragraph main points? (pushing too much?)\
+    How can flow from each main argument improve? \
+    How can transitions from each argument improve? Quote an example from the text. If there is no example, return null. \
+    Do the main points of the writing sample answer the research question? How can the main points be more targeted and directly answer the research question? \
+    ** Areas to expand on:** \
+    Are there any evidence points that need additional analysis? Give the user prompts for analyzing the evidence deeper.\
+    What main points need to be expanded on? Quote an example from the text. If there is no example, return null. \
+    ";
+  } else if (writingStyle == "Persuasive Essay"){
+    prompt = "**Argumentative stance (take a clear position)**\
+    State the writer's main argument. How can the user take a more clear argumentative stance?\
+    State the writer's main argument. What are some areas that the user can improve their stance clarity?\
+    State the writer's main argument. Does this argumentative stance answer the assignment description? Return null if the user did not input an assignment description.\
+    What areas of the argument can be expanded upon?\
+    **Counter Arguments**\
+    Look for a counter argument in the writer's work. What are some counter arguments the user can expand upon? Quote an example from the text. If there is no example, return null. \
+    Look for a current counter argument in the writer's work. What are some counter argumentative prompts to look into and expand on?\
+    **Tone**\
+    Quote some areas where the user does not employ an objective tone. \
+    Offer suggestions on how to create a more objective tone.";
+  } else {
+    prompt = "Give the user suggestions to improve the flow of their writing?";
+  }
+
+  return prompt;
+
+}
+
+async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assignment) {
+  prompt = getprompt(textType)
+  console.log(prompt)
+  console.log(textType)
   const data = {
     model: "gpt-3.5-turbo",
     messages: [
@@ -253,24 +304,26 @@ async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assi
         role: "system",
         content:
           "You are an AI agent intended to help users learn to write. Provide helpful suggestions to help users improve their writing skills.\
-          Generate 10 distinct suggestions",
+          Generate 10 distinct individual suggestions",
       },
       {
         role: "system",
         content: "The user will supply input text. Your prompt is: ${prompt} \
-        The user is writing a ${writingStyle}, so give them suggestions specific to that style, referencing specific point (examples) in their writing where they can improve. \
-        The user's goal is: ${assignment}, verify that the user's writing is on track to meet that goal."
-      },
+        The user is writing a ${textType}, so give them suggestions specific to that style, referencing specific point (examples) in their writing where they can improve. \
+        The user's goal is: ${assignment}, verify that the user's writing is on track to meet that goal. If the user's writing does not seem to match the  ${textType} writing style, mention that as a suggestion."
+      }, 
 
       {
         role: "system",
-        content: "Limit the response to 200 tokens per suggestion to keep each suggestion concise. Provide one specific example and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
+        content: "Return a list of 10 distinct indivudal suggestions. Limit the response of each individual suggestion to 200 tokens to keep each suggestion concise. There should be 10 indiviudal suggestions so the repsonse should not exceed 2000 tokens\
+          Provide one specific example and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
       },
 
       {
         role: "system",
         content:
-          "Generate the output of the suggestions so that there is a short title and a body of text. The title should be the of the suggestion, and the body should contain the suggestion itself.",
+          "Generate the output of the suggestions so that there is a short title and a body of text. The title should be the main topic (a summary) the suggestion, and the body should contain the suggestion itself. The format should look like this:\
+           **Title:** 'Title of suggestion' **Body:** 'Body of suggestion'",
       },
  
       {
@@ -279,7 +332,7 @@ async function call_LLM(prompt = "Hello! Testing", text = "", writingStyle, assi
       },
     ],
     temperature: 1,
-    max_tokens: 200,
+    max_tokens: 2000,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
@@ -303,7 +356,7 @@ async function generateAISuggestion(prompt, writingStyle, assignment) {
   //quill editor functions
   const text = quill.getText(0);
 
-  const response = await call_LLM(prompt, text, writingStyle, assignment);
+  const response = await call_LLM( text, prompt, writingStyle, assignment);
   title = "output from LLM";
   body = response;
 
