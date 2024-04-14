@@ -3,7 +3,6 @@
 let OPENAI_API_KEY;
 
 window.onload = () => {
-  OPENAI_API_KEY = prompt("Please enter your OpenAI API Key: ");
   //  Listener to cache text on changes
   quill.on("text-change", () => {
     var text = quill.getSemanticHTML();
@@ -13,6 +12,7 @@ window.onload = () => {
   //   Load cached text and set text editor contents
   var cachedText = localStorage.getItem("text") || "";
   quill.clipboard.dangerouslyPasteHTML(cachedText);
+  OPENAI_API_KEY = prompt("Please enter your OpenAI API Key: ");
 };
 
 //modal / popup
@@ -21,7 +21,7 @@ var modal = document.getElementById("id01");
 var textarea = document.getElementById("message-text");
 
 //TODO:  TEXT TYPE AND ASSIGNMENT DETAILS TO BE SENT TO BACKEND
-var textType = "Other";
+var textType = "";
 var assignment = "";
 
 function closeModal() {
@@ -61,9 +61,26 @@ function suggestMode() {
   deleteEditingSuggestions();
   resetHighlights();
   // TODO: Update prompting
+}
+
+function generateAISuggestionWrapper() {
   generateAISuggestion(
-    ("Give the user suggestions to improve the flow of their writing",
-    textType, assignment)
+    "Which sentences or ideas should be expanded on through analysis or additional evidence? Make suggestions as to how they can expand on meaningful analysis or additional evidence research.",
+    textType,
+    assignment,
+    "Areas to expand on"
+  );
+  generateAISuggestion(
+    "Explain why opening hooks are important and give an example of one which would fit into the text. Be very concise and use plain text.",
+    textType,
+    assignment,
+    "Use an opening hook"
+  );
+  generateAISuggestion(
+    "Provide guidance on narrative structure and pacing, giving one specific example of where the user can improve their flow",
+    textType,
+    assignment,
+    "Narrative structure and pacing"
   );
 }
 
@@ -178,7 +195,6 @@ function generateEdits() {
   }
 
   //temporary way to generate suggestions
-  /*
   numOfSuggestions = 4;
   title = "new suggestion";
   body = "body of suggestion";
@@ -208,7 +224,6 @@ function generateEdits() {
       j++;
     }
   }
-  */
 }
 
 //delete editing suggestions when clicked away from the editing tab
@@ -338,6 +353,8 @@ async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assi
     presence_penalty: 0,
   };
 
+  console.log(JSON.stringify(data));
+
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -352,7 +369,12 @@ async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assi
   return message;
 }
 
-async function generateAISuggestion(prompt, writingStyle, assignment) {
+async function generateAISuggestion(
+  prompt,
+  writingStyle,
+  assignmentDetails,
+  title
+) {
   //quill editor functions
   const text = quill.getText(0);
 
@@ -413,16 +435,18 @@ function resetHighlights() {
   });
 }
 
-function getIndicesOfSubstring(str, substring) {
-  const startingIndices = [];
-  let indexOccurence = str.indexOf(substring, 0);
+function getIndicesOfSubstring(string, substring) {
+  let indices = [];
 
-  while (indexOccurence >= 0) {
-    startingIndices.push(indexOccurence);
+  // Regular expression to match word boundaries
+  let regex = new RegExp("\\b" + substring + "\\b", "gi");
 
-    indexOccurence = str.indexOf(substring, indexOccurence + 1);
+  // Loop through matches
+  while ((match = regex.exec(string)) !== null) {
+    indices.push(match.index);
   }
-  return startingIndices;
+
+  return indices;
 }
 
 function highlightWord(str, selectedWord) {
