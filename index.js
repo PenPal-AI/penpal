@@ -331,7 +331,7 @@ async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assi
       {
         role: "system",
         content: "Return a list of 10 distinct indivudal suggestions. Limit the response of each individual suggestion to 200 tokens to keep each suggestion concise. There should be 10 indiviudal suggestions so the repsonse should not exceed 2000 tokens\
-          Provide one specific example and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
+          Provide one specific example from the text provided and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
       },
 
       {
