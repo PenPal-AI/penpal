@@ -12,12 +12,15 @@
   <link href="./css/custom.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="icon" type="image/x-icon" href="./favicon.png">
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
 </head>
 
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
   <!-- Nav Bar -->
@@ -60,8 +63,9 @@
 
 
         <div class="w3-container">
-          <button type="button" onclick="document.getElementById('id01').style.display='block'" class="btn btn-secondary">Customize Suggestions</button>
-        
+          <button type="button" onclick="document.getElementById('id01').style.display='block'"
+            class="btn btn-secondary">Customize Suggestions</button>
+
           <div id="id01" class="w3-modal modal">
             <div class="w3-modal-content">
               <div class="w3-container">
@@ -74,24 +78,27 @@
                       <button id="writing-type" class="btn btn-secondary">Writing Type ▼</button>
                       <div class="w3-dropdown-content w3-bar-block w3-border">
                         <a href="#" onClick="setText('Research Paper')" class="w3-bar-item w3-button">Research Paper</a>
-                        <a href="#" onClick="setText('Persuasive Essay')" class="w3-bar-item w3-button">Persuasive Essay</a>
+                        <a href="#" onClick="setText('Persuasive Essay')" class="w3-bar-item w3-button">Persuasive
+                          Essay</a>
                         <!--<a href="#" onClick="setText('Narrative')" class="w3-bar-item w3-button">Narrative</a>
                         <a href="#" onClick="setText('Literary Analysis')" class="w3-bar-item w3-button">Literary Analysis</a>-->
-                        <a href="#" onClick="setText('Email / Communication')" class="w3-bar-item w3-button">Email / Communication</a>
+                        <a href="#" onClick="setText('Email / Communication')" class="w3-bar-item w3-button">Email /
+                          Communication</a>
                         <a href="#" onClick="setText('Other')" class="w3-bar-item w3-button">Other</a>
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
                 <br>
-                
+
                 <div class="w3-container">
-                  <label for="message-text" class="col-form-label">Copy / paste your assignment or describe your goals for this writing:</label>      
+                  <label for="message-text" class="col-form-label">Copy / paste your assignment or describe your goals
+                    for this writing:</label>
                   <textarea class="form-control" id="message-text" style="height: 150px"></textarea>
-                            <br>
-                            <button type="button" class="btn btn-secondary" onClick="closeModal()">Submit</button>
-                            <br>
+                  <br>
+                  <button type="button" class="btn btn-secondary" onClick="closeModal()">Submit</button>
+                  <br>
                 </div>
 
 
@@ -102,13 +109,14 @@
         </div>
 
         <br>
-        
+
         <div class="w3-container">
-        <div class="generate-button generate-button-hide">
-          <button type="button" onClick="generateAISuggestion()" class="suggest btn btn-secondary">Generate
-            Suggestion</button>
-          <p style="padding-left: 10px">Click the button to generate suggestions!</p>
-        </div> </div>
+          <div class="generate-button generate-button-hide">
+            <button type="button" onClick="generateAISuggestion()" class="suggest btn btn-secondary">Generate
+              Suggestion</button>
+            <p style="padding-left: 10px">Click the button to generate suggestions!</p>
+          </div>
+        </div>
 
         <!-- Submit Button 
           Why do we need this? This doesn't do anything
