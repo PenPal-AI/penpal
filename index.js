@@ -128,7 +128,6 @@ function generateWordFrequencyEdits(
         (j).toString() +
         "\")' class='list-group-item editing-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
         (j).toString() + "'" + "id='" + (j).toString() + "'>" +
-        
         "<div class='d-flex w-100 justify-content-between'>" +
         "<h5 class='mb-1'>" +
         title +
@@ -143,38 +142,17 @@ function generateWordFrequencyEdits(
         number +
         body2 +
         "<span style='height:30px'></span>" +
+        /*
         "<span class='thumbs'>" +
           "<span class='btn thumb show-thumb' id='" + (j).toString() + "' onclick='thumbsUp(" + (j).toString() + ")'>" +
           "👍" + "</span>" +
           "<span class='btn thumb show-thumb' id='" + (j).toString() + "' onclick='thumbsDown(" + (j).toString() + ")'>" +
           "👎" + "</span>" + 
         "</span>" +
+        */
         "</p></a>"
     );
   j++;
-}
-
-function thumbsUp(key) {
-  feedback = $(".thumb");
-  for (let i = 0; i < feedback.length; i++) {
-    const element = feedback[i];
-    if(element.id == key) {
-      element.remove();
-      //element.classList.remove("show-thumb");
-      //element.classList.add("hide-thumb");
-    }
-  }
-}
-
-function thumbsDown(key) {
-  listItems = $(".editing-item");
-  for (let l = 0; l < listItems.length; l++) {
-    const element = listItems[l];
-    if (element.id == key) {
-      element.remove();
-      j--;
-    }
-  }
 }
 
 //tokenize text
@@ -401,7 +379,7 @@ async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assi
 }
 
 //tracks number of generated suggestions
-var i = 10;
+var i = 0;
 
 function parseText(text) {
     const regex = /\*\*Title:\*\*(.*?)\*\*Body:\*\*(.*?)\*\*/gs;
@@ -437,9 +415,8 @@ async function generateAISuggestion(
     .append(
       " <a href='#' onclick='selectCard(\"elem" +
         (i).toString() +
-        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
-        (i).toString() +
-        "'>" +
+        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start suggesting-item elem" +
+        (i).toString() + "'" + "id='" + (i).toString() + "'>" +
         "<div class='d-flex w-100 justify-content-between'>" +
         "<h5 class='mb-1'>" +
         title +
@@ -447,11 +424,11 @@ async function generateAISuggestion(
         "</div>" +
         "<p class='mb-1'>" +
         body +
-        "<span class='badge badge-secondary badge-pill'>" +
-        "👍" +
-        "</span>" +
-        "<span class='badge badge-secondary badge-pill'>" +
-        "👎" +
+        "<span class='thumbs'>" +
+          "<span class='btn thumb show-thumb' id='" + (i).toString() + "' onclick='thumbsUp(" + (i).toString() + ")'>" +
+          "👍" + "</span>" +
+          "<span class='btn thumb show-thumb' id='" + (i).toString() + "' onclick='thumbsDown(" + (i).toString() + ")'>" +
+          "👎" + "</span>" + 
         "</span>" +
         "</p></a>"
     );
@@ -459,6 +436,29 @@ async function generateAISuggestion(
 
   }
 
+}
+
+function thumbsUp(key) {
+  feedback = $(".thumb");
+  for (let i = 0; i < feedback.length; i++) {
+    const element = feedback[i];
+    if(element.id == key) {
+      element.remove();
+      //element.classList.remove("show-thumb");
+      //element.classList.add("hide-thumb");
+    }
+  }
+}
+
+function thumbsDown(key) {
+  listItems = $(".suggesting-item");
+  for (let l = 0; l < listItems.length; l++) {
+    const element = listItems[l];
+    if (element.id == key) {
+      element.remove();
+      j--;
+    }
+  }
 }
 
 //makes suggestions selectable
