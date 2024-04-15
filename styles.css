@@ -34,3 +34,21 @@
 .modal {
   height: 500px;
 }
+
+.thumbs {
+  margin: 20px;
+}
+
+.thumb {
+  padding: 10px;
+  margin: 20px;
+  position: relative;
+}
+
+.show-thumb {
+  display: inline-block;
+}
+
+.hide-thumb {
+  display: none;
+}
