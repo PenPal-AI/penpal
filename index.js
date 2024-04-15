@@ -360,13 +360,13 @@ async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assi
       {
         role: "system",
         content: "Return a list of 10 distinct indivudal suggestions. Limit the response of each individual suggestion to 200 tokens to keep each suggestion concise. There should be 10 indiviudal suggestions so the repsonse should not exceed 2000 tokens\
-          Provide one specific example from the text provided and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
+          FOR EACH SUGGESTION, Provide one specific example from the text provided (PREFERABLY A QUOTE) and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
       },
 
       {
         role: "system",
         content:
-          "Generate the output of the suggestions so that there is a short title and a body of text. The title should be the main topic (a summary) the suggestion, and the body should contain the suggestion itself. The format should look like this:\
+          "Generate the output of the 10 suggestions so that there is are 10 short titles and 10 bodies of text. The title should be the main topic (a summary) the suggestion, and the body should contain the suggestion itself. The format should look like this:\
            **Title:** 'Title of suggestion' **Body:** 'Body of suggestion'",
       },
  
@@ -393,13 +393,29 @@ async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assi
     body: JSON.stringify(data),
   });
 
+
   const res = await response.json();
   const message = res.choices[0].message.content;
+  console.log(message);
   return message;
 }
 
 //tracks number of generated suggestions
-var i = 0;
+var i = 10;
+
+function parseText(text) {
+    const regex = /\*\*Title:\*\*(.*?)\*\*Body:\*\*(.*?)\*\*/gs;
+    let matches;
+    const results = [];
+
+    while ((matches = regex.exec(text)) !== null) {
+        const title = matches[1].trim();
+        const body = matches[2].trim();
+        results.push({ title, body });
+    }
+
+    return results;
+}
 
 async function generateAISuggestion(
   prompt,
@@ -411,10 +427,12 @@ async function generateAISuggestion(
   const text = quill.getText(0);
 
   const response = await call_LLM( text, prompt, writingStyle, assignmentDetails);
-  title = "output from LLM";
-  body = response;
+  const suggestions = parseText(response);
 
-  $(".list-group")
+  for (const result of suggestions) {
+    const title = result.title; // Assuming this is constant for all items
+    const body = result.body; // Extracting the body from parsedResults
+     $(".list-group")
     .eq(1)
     .append(
       " <a href='#' onclick='selectCard(\"elem" +
@@ -438,6 +456,9 @@ async function generateAISuggestion(
         "</p></a>"
     );
   i++;
+
+  }
+
 }
 
 //makes suggestions selectable
