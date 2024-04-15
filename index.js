@@ -154,6 +154,31 @@ function generateWordFrequencyEdits(
   j++;
 }
 
+function keywordExtraction(text, n = 5) {
+  let words = text.toLowerCase().match(/\w+/g);
+  let frequencies = words.reduce((count, word) => {
+    count[word] = (count[word] || 0) + 1;
+    return count;
+  }, {});
+  let sorted = Object.entries(frequencies).sort((a, b) => b[1] - a[1]);
+  return sorted.slice(0, n).map(word => word[0]);
+}
+
+const text = quill.getText();
+const extractedKeywords = keywordExtraction(text);
+
+const keywordsList = document.getElementById('keywords-list');
+// Clear existing list
+keywordsList.innerHTML = '';
+
+// Add each keyword to the list
+extractedKeywords.forEach((keyword) => {
+    const li = document.createElement('li');
+    li.textContent = keyword;
+    li.classList.add('list-group-item');
+    keywordsList.appendChild(li);
+});
+
 function thumbsUp(key) {
   feedback = $(".thumb");
   for (let i = 0; i < feedback.length; i++) {
