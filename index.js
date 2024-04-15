@@ -179,6 +179,50 @@ extractedKeywords.forEach((keyword) => {
     keywordsList.appendChild(li);
 });
 
+async function generateRankedAISuggestions() {
+  const text = quill.getText(0);
+  const response = await call_LLM(text, prompt, textType, assignment);
+  const suggestions = JSON.parse(response); // Parse the LLM output into suggestion objects
+
+  // Define a scoring system based on keywords in the suggestion text
+  const scoreBasedOnKeywords = (suggestionText) => {
+      if (suggestionText.includes("critical")) return 1;    
+      if (suggestionText.includes("important")) return 2;
+      if (suggestionText.includes("minor")) return 3;
+      return 4; // Default score for suggestions without these keywords
+  };
+
+  // Assign an importance score to each suggestion
+  suggestions.forEach(suggestion => {
+      suggestion.importance = scoreBasedOnKeywords(suggestion.text);
+  });
+
+  // Sort suggestions by importance (lower scores are more important)
+  suggestions.sort((a, b) => a.importance - b.importance);
+
+  // Select the top 3 suggestions
+  const topSuggestions = suggestions.slice(0, 3);
+
+  // Clear previous suggestions
+  $(".list-group").eq(1).empty();
+
+  // Map importance to colors: 1 (red), 2 (orange), 3 (yellow), otherwise (grey)
+  const importanceColors = {1: "red", 2: "orange", 3: "yellow", 4: "grey"};
+
+  // Display each suggestion with the appropriate color
+  topSuggestions.forEach((suggestion, index) => {
+      let color = importanceColors[suggestion.importance]; // Get the color based on importance
+      $(".list-group").eq(1).append(
+          `<a href='#' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start' style='border-left: 5px solid ${color};'>
+              <div class='d-flex w-100 justify-content-between'>
+                  <h5 class='mb-1'>Suggestion ${index + 1}</h5>
+              </div>
+              <p class='mb-1'>${suggestion.text}</p>
+          </a>`
+      );
+  });
+}
+
 function thumbsUp(key) {
   feedback = $(".thumb");
   for (let i = 0; i < feedback.length; i++) {
