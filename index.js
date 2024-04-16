@@ -128,7 +128,6 @@ function generateWordFrequencyEdits(
         (j).toString() +
         "\")' class='list-group-item editing-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
         (j).toString() + "'" + "id='" + (j).toString() + "'>" +
-        
         "<div class='d-flex w-100 justify-content-between'>" +
         "<h5 class='mb-1'>" +
         title +
@@ -143,107 +142,17 @@ function generateWordFrequencyEdits(
         number +
         body2 +
         "<span style='height:30px'></span>" +
+        /*
         "<span class='thumbs'>" +
           "<span class='btn thumb show-thumb' id='" + (j).toString() + "' onclick='thumbsUp(" + (j).toString() + ")'>" +
           "👍" + "</span>" +
           "<span class='btn thumb show-thumb' id='" + (j).toString() + "' onclick='thumbsDown(" + (j).toString() + ")'>" +
           "👎" + "</span>" + 
         "</span>" +
+        */
         "</p></a>"
     );
   j++;
-}
-
-function keywordExtraction(text, n = 5) {
-  let words = text.toLowerCase().match(/\w+/g);
-  let frequencies = words.reduce((count, word) => {
-    count[word] = (count[word] || 0) + 1;
-    return count;
-  }, {});
-  let sorted = Object.entries(frequencies).sort((a, b) => b[1] - a[1]);
-  return sorted.slice(0, n).map(word => word[0]);
-}
-
-const text = quill.getText();
-const extractedKeywords = keywordExtraction(text);
-
-const keywordsList = document.getElementById('keywords-list');
-// Clear existing list
-keywordsList.innerHTML = '';
-
-// Add each keyword to the list
-extractedKeywords.forEach((keyword) => {
-    const li = document.createElement('li');
-    li.textContent = keyword;
-    li.classList.add('list-group-item');
-    keywordsList.appendChild(li);
-});
-
-async function generateRankedAISuggestions() {
-  const text = quill.getText(0);
-  const response = await call_LLM(text, prompt, textType, assignment);
-  const suggestions = JSON.parse(response); // Parse the LLM output into suggestion objects
-
-  // Define a scoring system based on keywords in the suggestion text
-  const scoreBasedOnKeywords = (suggestionText) => {
-      if (suggestionText.includes("critical")) return 1;    
-      if (suggestionText.includes("important")) return 2;
-      if (suggestionText.includes("minor")) return 3;
-      return 4; // Default score for suggestions without these keywords
-  };
-
-  // Assign an importance score to each suggestion
-  suggestions.forEach(suggestion => {
-      suggestion.importance = scoreBasedOnKeywords(suggestion.text);
-  });
-
-  // Sort suggestions by importance (lower scores are more important)
-  suggestions.sort((a, b) => a.importance - b.importance);
-
-  // Select the top 3 suggestions
-  const topSuggestions = suggestions.slice(0, 3);
-
-  // Clear previous suggestions
-  $(".list-group").eq(1).empty();
-
-  // Map importance to colors: 1 (red), 2 (orange), 3 (yellow), otherwise (grey)
-  const importanceColors = {1: "red", 2: "orange", 3: "yellow", 4: "grey"};
-
-  // Display each suggestion with the appropriate color
-  topSuggestions.forEach((suggestion, index) => {
-      let color = importanceColors[suggestion.importance]; // Get the color based on importance
-      $(".list-group").eq(1).append(
-          `<a href='#' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start' style='border-left: 5px solid ${color};'>
-              <div class='d-flex w-100 justify-content-between'>
-                  <h5 class='mb-1'>Suggestion ${index + 1}</h5>
-              </div>
-              <p class='mb-1'>${suggestion.text}</p>
-          </a>`
-      );
-  });
-}
-
-function thumbsUp(key) {
-  feedback = $(".thumb");
-  for (let i = 0; i < feedback.length; i++) {
-    const element = feedback[i];
-    if(element.id == key) {
-      element.remove();
-      //element.classList.remove("show-thumb");
-      //element.classList.add("hide-thumb");
-    }
-  }
-}
-
-function thumbsDown(key) {
-  listItems = $(".editing-item");
-  for (let l = 0; l < listItems.length; l++) {
-    const element = listItems[l];
-    if (element.id == key) {
-      element.remove();
-      j--;
-    }
-  }
 }
 
 //tokenize text
@@ -429,13 +338,13 @@ async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assi
       {
         role: "system",
         content: "Return a list of 10 distinct indivudal suggestions. Limit the response of each individual suggestion to 200 tokens to keep each suggestion concise. There should be 10 indiviudal suggestions so the repsonse should not exceed 2000 tokens\
-          Provide one specific example from the text provided and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
+          FOR EACH SUGGESTION, Provide one specific example from the text provided (PREFERABLY A QUOTE) and actionable advice with references to the user's text. Do not rewrite more than one sentence for them.",
       },
 
       {
         role: "system",
         content:
-          "Generate the output of the suggestions so that there is a short title and a body of text. The title should be the main topic (a summary) the suggestion, and the body should contain the suggestion itself. The format should look like this:\
+          "Generate the output of the 10 suggestions so that there is are 10 short titles and 10 bodies of text. The title should be the main topic (a summary) the suggestion, and the body should contain the suggestion itself. The format should look like this:\
            **Title:** 'Title of suggestion' **Body:** 'Body of suggestion'",
       },
  
@@ -462,13 +371,29 @@ async function call_LLM(text = "", prompt = "hello! Testing", writingStyle, assi
     body: JSON.stringify(data),
   });
 
+
   const res = await response.json();
   const message = res.choices[0].message.content;
+  console.log(message);
   return message;
 }
 
 //tracks number of generated suggestions
 var i = 0;
+
+function parseText(text) {
+    const regex = /\*\*Title:\*\*(.*?)\*\*Body:\*\*(.*?)\*\*/gs;
+    let matches;
+    const results = [];
+
+    while ((matches = regex.exec(text)) !== null) {
+        const title = matches[1].trim();
+        const body = matches[2].trim();
+        results.push({ title, body });
+    }
+
+    return results;
+}
 
 async function generateAISuggestion(
   prompt,
@@ -480,17 +405,18 @@ async function generateAISuggestion(
   const text = quill.getText(0);
 
   const response = await call_LLM( text, prompt, writingStyle, assignmentDetails);
-  title = "output from LLM";
-  body = response;
+  const suggestions = parseText(response);
 
-  $(".list-group")
+  for (const result of suggestions) {
+    const title = result.title; // Assuming this is constant for all items
+    const body = result.body; // Extracting the body from parsedResults
+     $(".list-group")
     .eq(1)
     .append(
       " <a href='#' onclick='selectCard(\"elem" +
         (i).toString() +
-        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start elem" +
-        (i).toString() +
-        "'>" +
+        "\")' class='list-group-item list-group-item-action list-group-item-light flex-column align-items-start suggesting-item elem" +
+        (i).toString() + "'" + "id='" + (i).toString() + "'>" +
         "<div class='d-flex w-100 justify-content-between'>" +
         "<h5 class='mb-1'>" +
         title +
@@ -498,15 +424,41 @@ async function generateAISuggestion(
         "</div>" +
         "<p class='mb-1'>" +
         body +
-        "<span class='badge badge-secondary badge-pill'>" +
-        "👍" +
-        "</span>" +
-        "<span class='badge badge-secondary badge-pill'>" +
-        "👎" +
+        "<span class='thumbs'>" +
+          "<span class='btn thumb show-thumb' id='" + (i).toString() + "' onclick='thumbsUp(" + (i).toString() + ")'>" +
+          "👍" + "</span>" +
+          "<span class='btn thumb show-thumb' id='" + (i).toString() + "' onclick='thumbsDown(" + (i).toString() + ")'>" +
+          "👎" + "</span>" + 
         "</span>" +
         "</p></a>"
     );
   i++;
+
+  }
+
+}
+
+function thumbsUp(key) {
+  feedback = $(".thumb");
+  for (let i = 0; i < feedback.length; i++) {
+    const element = feedback[i];
+    if(element.id == key) {
+      element.remove();
+      //element.classList.remove("show-thumb");
+      //element.classList.add("hide-thumb");
+    }
+  }
+}
+
+function thumbsDown(key) {
+  listItems = $(".suggesting-item");
+  for (let l = 0; l < listItems.length; l++) {
+    const element = listItems[l];
+    if (element.id == key) {
+      element.remove();
+      j--;
+    }
+  }
 }
 
 //makes suggestions selectable
