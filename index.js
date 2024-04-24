@@ -20,7 +20,6 @@ window.onload = () => {
 var modal = document.getElementById("id01");
 var textarea = document.getElementById("message-text");
 
-//TODO:  TEXT TYPE AND ASSIGNMENT DETAILS TO BE SENT TO BACKEND
 var textType = "";
 var assignment = "";
 
@@ -100,7 +99,13 @@ function filterFunction(value) {
     value != "an" &&
     value != "the" &&
     value != "and" &&
-    value != "or"
+    value != "or" &&
+    value != "to" &&
+    value != "it" &&
+    value != "in" &&
+    value != "by" &&
+    value != "from" &&
+    value != "of"
   );
 }
 
@@ -185,13 +190,15 @@ function generateEdits() {
     var word = filteredTextArray[k];
     if (count[word]) {
       count[word] += 1;
+      //console.log(word);
+      //console.log(count[word]);
     } else {
       count[word] = 1;
     }
   }
 
   for (element in count) {
-    if (count[element] / numWords >= 0.1 && count[element] > 2) {
+    if (count[element] / numWords >= 0.02 && count[element] > 2) {
       generateWordFrequencyEdits(
         "Word Frequency Suggestion",
         element,
