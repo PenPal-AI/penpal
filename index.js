@@ -393,9 +393,12 @@ function parseText(text) {
     let matches;
     const results = [];
 
-    while ((matches = regex.exec(text)) !== null) {
+    var m = 0;
+
+    while ((matches = regex.exec(text)) !== null && m < 3) {
         const title = matches[1].trim();
         const body = matches[2].trim();
+        m++;
         results.push({ title, body });
     }
 
